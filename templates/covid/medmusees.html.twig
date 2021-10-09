@@ -1,0 +1,247 @@
+{% extends 'medBase.html.twig' %}
+
+{% block body %}
+
+<header class="container-fluid uni-background-1 text-center pt-5">
+    <div class="text-center">
+        <!-- Page title -->
+            <div class="mx-auto">
+                <h1 class="text-center" style="color:white;font-family:Arial;font-size:35px;font-weight:bold;">CHOISISSEZ VOTRE CENTRE DE VACCINATION</h1>
+                <div class="row text-white h1"><hr><i class="fas fa-hand-holding-medical"></i><hr></div>
+            </div>
+
+        <!-- End page title -->
+
+
+    </div>
+</header>
+
+{{dump(tabMed[4])}}
+
+        {# Règle de parcours du tableau d'une api pour parcourir TOUTES les données #}
+
+        {# Si la propriété contient plusieurs [], parcourir la propriété avec for sans faire mention du [] et ce également pour les sous-propriétés  
+        exemple for item in tabMed.features ET item.properties.c_nom #}
+
+<div class="shadow-lg p-3 bg-white rounded mt-3 mx-auto w-50" style="margin-bottom:-50px;">
+
+    <form class="align-items-center mx-auto text-center" name="regionSelect" method="post">
+            <div class="row col-sm-12">
+                <div class="form-group text-warning h4 col-sm-6 mx-auto">
+                  <label for="inputRegion">Choisissez une région</label>
+                  <select data-region="{{dataRegion}}" id="inputRegion" name="region[code]" class="form-control btnRegion">
+                    <option selected>Choisissez une région...</option>
+                    {% for region in regions %}
+                    <option data-name="{{region.name}}" value="{{region.code}}">{{region.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
+    </form>
+    
+    <form action="{{path('med')}}" class="align-items-center mx-auto text-center" name="departementSelect" method="post">
+            <div class="row col-sm-12">
+                <div class="form-group h4 text-danger col-md-6 mx-auto">
+                  <label for="inputDpt">Choisissez un département</label>
+                  <select id="inputDpt" data-dpt="{{dataDpt}}" name="departement" class="btnDpt form-control">
+                  
+                    {# permet de garder en memoire le département sélectionné après le traitement php #}
+                    {% if choixDep != "" %}
+                    
+                    {% for departement in departements %}
+                    
+                    {% if choixDep == departement.name %}
+                        {% set selection = "selected" %}
+                        {% else %}
+                        {% set selection = "" %}
+                    {% endif %}
+                    
+                    <option {{selection}} value="{{departement.regionCode}}-{{departement.code}}">{{departement.name}}</option>
+                    {% endfor %}
+                    
+                    {% else %}
+                    <option selected>Choisissez un département...</option>
+                    {% for departement in departements %}
+                    <option class="text-danger" selected value="{{departement.regionCode}}-{{departement.code}}">{{departement.name}}</option>
+                    {% endfor %}
+                    
+                    
+                    {% endif %}
+                  </select>
+                </div>
+            </div>
+            <div id="mondiv" class="hides">
+                <input data-dep="{{path("med")}}" id="submitDep" class="btn btn-dark text-dark depJs" type="submit"/>
+            </div>
+    </form>
+
+    <form class="mb-5" action="{{path('med')}}" class="align-items-center text-center" name="villeSelect" method="post" class="villeJs" >
+            <div class="row col-sm-12">
+                <div class="form-group h4 text-info col-md-6 mx-auto text-center">
+                  <label for="inputVille">Choisissez une Ville</label>
+                  <select id="inputVille" name="ville[code]" data-city="{{dataVille}}" class="btnVille form-control">
+                    
+                    {# permet de garder en memoire la ville sélectionnée après le traitement php #}
+                    {% if choixDep != "" %}
+                    
+                    {% for codeVille in codeVilles %}
+                    {% if choixVille == codeVille.ville %}
+                    {% set selection = "selected" %}
+                    {% else %}
+                    {% set selection = "" %}
+                    {% endif %}
+                    <option {{selection}} id="optionVille" class="optionId" data-ville="{{codeVille.ville}}" data-id="{{codeVille.id}}" value="{{codeVille.codePostal}}-{{ codeVille.codePostal|striptags|slice(0, 2)|raw }}">{{codeVille.ville}}-{{codeVille.codePostal}}</option>
+                    {% endfor %}
+                    
+                    
+                    {% else %}
+                    <option selected>Choisissez une ville...</option>
+                    {% endif %}
+
+                  </select>
+                </div>
+            </div>
+            <div id="madiv" class="hide">
+                <input data-ville="{{path("med")}}" id="submitVille" class="btn btn-dark text-dark villeJs" type="submit"/>
+            </div>
+
+    </form>
+</div>
+
+<div class="uni-services">
+    <div id="wrapper-container" class="site-wrapper-container">
+
+
+        <div id="main-content" class="site-main-content">
+            <section class="site-content-area">
+
+                <div class="uni-services-body">
+
+                    <!--OUR SERVICES 2-->
+                    <div class="uni-our-services-2 uni-background-1">
+                        <div class="container">
+
+                            {% if codePostal != "" or codeDep != "" %}
+                            {% for key, item in tabMed %}
+                            
+                            
+
+                            {% if item.fields.cp_m is defined and item.fields.cp_m == codePostal or item.fields.cp_m is defined and item.fields.cp_m|striptags|slice(0, 2)|raw  == codeDep or item.fields.ville_m == choixDep %}
+                            <div>{{item.fields.nomoff}}</div>
+                            {% if item.fields.hist is defined %}<div>{{item.fields.hist}}</div>{% endif %}
+                            {% if item.fields.atout is defined %}<div>{{item.fields.atout}}</div>{% endif %}
+                            {% if item.fields.tel_m is defined %}<div>{{item.fields.tel_m}}</div>{% endif %}
+                            {% if item.fields.cp_m is defined %}<div>{{item.fields.cp_m}}</div>{% endif %}
+                            {% endif %}
+                            
+                            
+                            
+                            {% endfor %}
+                            {% endif %}
+                        
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <footer class="site-footer footer-default">
+            <div class="footer-main-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="footer-main-content-elements">
+                            <div class="footer-main-content-element col-md-3 col-sm-6">
+                                <aside class="widget">
+                                    <div class="widget-title uni-uppercase"><a href="#"><img src="images/logowhite.png" alt="" class="img-responsive"></a></div>
+                                    <div class="widget-content">
+                                        <p>
+                                            Pellentesque habitant morbi tristique senectus et netus et malesuada fame ac
+                                            turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget.
+                                        </p>
+                                        <div class="uni-info-contact">
+                                            <ul>
+                                                <li> <i class="fa fa-map-marker" aria-hidden="true"></i> 45 Queen's Park Rd, Brighton,  UK</li>
+                                                <li><i class="fa fa-phone" aria-hidden="true"></i> (094) 123 4567 - (094) 123 4568</li>
+                                                <li><i class="fa fa-envelope-o" aria-hidden="true"></i> medicareplus@domain.com</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </div>
+                            <div class="footer-main-content-element col-md-3 col-sm-6">
+                                <aside class="widget">
+                                    <h3 class="widget-title uni-uppercase">quick links</h3>
+                                    <div class="widget-content">
+                                        <div class="uni-quick-link">
+                                            <ul>
+                                                <li><a href="#"><span>+</span> Home</a></li>
+                                                <li><a href="#"><span>+</span> about</a></li>
+                                                <li><a href="#"><span>+</span> services</a></li>
+                                                <li><a href="#"><span>+</span> timetable</a></li>
+                                                <li><a href="#"><span>+</span> blog</a></li>
+                                                <li><a href="#"><span>+</span> contact</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </div>
+                            <div class="footer-main-content-element col-md-3 col-sm-6">
+                                <aside class="widget">
+                                    <h3 class="widget-title uni-uppercase">latest posts</h3>
+                                    <div class="widget-content">
+                                        <div class="uni-footer-latest-post">
+                                            <ul>
+                                                <li>
+                                                    <h4><a href="#">Lorem ipsum dolor sit amet, consectetuer</a></h4>
+                                                    <span class="time">june 12, 2017</span>
+                                                </li>
+                                                <li>
+                                                    <h4><a href="#">Aliquam tincidunt mauris eu risus amet</a></h4>
+                                                    <span class="time">june 12, 2017</span>
+                                                </li>
+                                                <li>
+                                                    <h4><a href="#">Morbi in sem quis dui placerat ornare column</a></h4>
+                                                    <span class="time">june 12, 2017</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </div>
+                            <div class="footer-main-content-element col-md-3 col-sm-6">
+                                <aside class="widget">
+                                    <h3 class="widget-title uni-uppercase">News<span>letter</span></h3>
+                                    <div class="widget-content">
+                                        <div class="uni-footer-newletter">
+                                            <div class="input-group">
+                                                <input type="email" class="form-control" placeholder="Enter your email">
+                                                <button class="btn btn-sub" type="submit">subscribe</button>
+                                            </div>
+                                            <div class="uni-social">
+                                                <h4>Follow us</h4>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                                                    <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </footer>
+    </div>
+</div>
+
+
+
+
+<script src="{{asset("geolocalisation.js")}}"></script>
+{% endblock %}

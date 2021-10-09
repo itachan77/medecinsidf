@@ -1,0 +1,214 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block scriptMap %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpJWVFy78NOp8wccPJcHjB0sw446OA9cM">
+</script>
+
+
+
+
+<script type="text/javascript">
+        function initialiserCarte() {
+        
+                varcentreGoogleMap = new google.maps.LatLng(48.111411, -1.680073);
+                
+                var optionsGoogleMap = {
+                zoom:8, 
+                center:centreGoogleMap, 
+                mapTypeId:google.maps.MapTypeId.ROADMAP 
+                }
+                
+                var maCarte = new google.maps.Map (document.getElementById("maCarte"), optionsGoogleMap);
+        }
+
+</script>
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container" onload="initialiserCarte()">
+
+<div class="h1 text-center">Choisissez votre centre de vaccination</div>
+
+        <div class="text-center mx-auto bg-dark">
+                <form class="row align-items-center mx-auto text-center" name="regionSelect" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-6 mx-auto">
+                              <label for="inputState">Choisissez une région</label>
+                              <select id="inputState" name="region[code]" class="form-control">
+                                <option selected>Région...</option>
+                                {% for region in regions %}
+                                <option value="{{region.code}}">{{region.name}} </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            
+                            <div class="col-sm-6 mx-auto">
+                                <input class="btn btn-danger text-center mx-auto mb-1" type="submit" value="Valider"/>
+                            </div>
+                        </div>
+                </form>
+                
+                {% if departements|length != 0 %}
+                <form class="row align-items-center" name="departementSelect" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group col-md-6 mx-auto">
+                              <label for="inputState">Choisissez un département</label>
+                              <select id="inputState" name="departement[code]" class="form-control">
+                                <option selected>Choisissez un département...</option>
+                                {% for departement in departements %}
+                                <option value="{{departement.code}}">{{departement.name}} </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            
+                            <div class="col-sm-6 mx-auto">
+                                <input type="submit" value="Valider"/>
+                            </div>
+                        <div class="col-sm-12">
+                </form>
+                {% endif %}
+                
+                
+                {% if codeVilles|length != 0 %}
+                <form class="row align-items-center" name="villeSelect" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group col-md-6 mx-auto">
+                              <label for="inputState">Choisissez une Ville</label>
+                              <select id="inputState" name="ville[code]" class="form-control">
+                                <option selected>Choisissez une ville...</option>
+                                {% for codeVille in codeVilles %}
+                                <option value="{{codeVille.codePostal}}">{{codeVille.ville}} </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <div class="col-sm-6 mx-auto">
+                                <input type="submit" value="Valider"/>
+                            </div>
+                        </div>
+                </form>
+                {% endif %}
+        </div>
+
+
+<div id="maCarte" style="width:100%; height:100%"></div>
+
+        {# {{dump(tabMed.features[4])}} #}
+
+
+        {# Règle de parcours du tableau d'une api pour parcourir TOUTES les données #}
+
+        {# Si la propriété contient plusieurs [], parcourir la propriété avec for sans faire mention du [] et ce également pour les sous-propriétés  
+        exemple for item in tabMed.features ET item.properties.c_nom #}
+
+        <div class="row align-items-center">
+        
+        {% if codePostal != "" %}
+        
+                {% for key, item in tabMed.features %}
+                {% if item.properties.c_com_cp == codePostal %}
+        
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 wow fadeInLeft div-n2" style="height:30rem; overflow:auto;width:18rem;border:1px solid black; border-radius:10px;box-shadow:5px 5px 5px black;" data-wow-delay="1.5s">
+        <div class="our-blog-item">
+            
+            <p class="card-text h3"><span class="text-danger h6">Centre de vaccination :<br></span>{{item.properties.c_nom}}</p>
+                  <ul class="list-group list-group-flush">
+                    <li>
+                        <div class="text-danger">Adresse :</div>
+                        <div>{{item.properties.c_adr_num}} {{item.properties.c_adr_voie}}</div>
+                        <div>{{item.properties.c_com_cp}} {{item.properties.c_com_nom}}</div>
+                        <div><i class="fas fa-phone-square-alt"></i> {{item.properties.c_rdv_tel}}</div>
+                        {% if item.properties.c_lieu_accessibilite == "OUI" %}
+                        <div><i class="fas fa-wheelchair"></i>Adapté aux personnes à mobilité réduite </div>
+                        {% endif %}
+                    <hr>
+                    </li>
+                    
+                        
+                    <li>
+                    <div class="text-danger">Structure : </div>
+                    <div>{{item.properties.c_structure_rais}}</div>
+                    <div> {{item.properties.c_structure_num}} {{item.properties.c_structure_voie}}</div>
+                    <div>{{item.properties.c_structure_cp}} {{item.properties.c_structure_com}}</div>
+                    <hr>
+                    </li>
+                    
+
+                    <li>
+                    {% if item.properties.c_rdv_lundi or item.properties.c_rdv_mardi or item.properties.c_rdv_mercredi or item.properties.c_rdv_jeudi or item.properties.c_rdv_vendredi or item.properties.c_rdv_samedi or item.properties.c_rdv_dimanche is not null %}
+                    <div class="text-danger">Jours et horaires d'ouverture :</div>
+                    {% endif %}
+                    
+                    <div class="row">
+                      <div class="col-sm-6">
+                    {% if item.properties.c_rdv_lundi != "" %}<div>Lundi : {{item.properties.c_rdv_lundi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_mardi != "" %}<div>Mardi : {{item.properties.c_rdv_mardi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_mercredi != "" %}<div>Mercredi : {{item.properties.c_rdv_mercredi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_jeudi != "" %}<div>Jeudi : {{item.properties.c_rdv_jeudi}}</div>{% endif %}
+                      </div>
+                      
+                      <div class="col-sm-6">
+                    {% if item.properties.c_rdv_vendredi != "" %}<div>Vendredi : {{item.properties.c_rdv_vendredi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_samedi != "" %}<div>Samedi : {{item.properties.c_rdv_samedi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_dimanche != "" %}<div>Dimanche : {{item.properties.c_rdv_dimanche}}</div>{% endif %}
+                      </div>
+                    </div>
+                    
+                    </li>
+                  </ul>
+            
+            
+            
+            
+            
+            
+            <div class="our-blog-ds">
+
+                <div class="entry-ourblog">
+                <h6>Carte google map</h6>
+                <div class="blog-thumb"> 
+                  <div class="mapouter">
+                    <div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q={{item.properties.c_adr_num}}{{item.properties.c_adr_voie}}{{item.properties.c_com_cp}}{{item.properties.c_com_nom}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="1" scrolling="no" marginheight="0" marginwidth="0"></iframe><br>
+                      <style>.mapouter{position:relative;text-align:right;height:400px;width:600px;}</style>
+                        <a href="https://www.embedgooglemap.net">google map embed iframe</a>
+                          <style>.gmap_canvas {overflow:hidden;background:none!important;height:400px;width:600px;}</style>
+                    </div>
+                  </div>
+                </div>
+                <a class="tz-readmore" data-toggle="modal" data-target="#myModal3">READ MORE<i class="fa fa-caret-right"></i></a> </div>
+            </div>
+
+        </div>
+        </div>
+            
+                {% endif %}
+                {% endfor %}
+                
+
+        {% endif %}
+        </div>
+
+
+
+
+</div>
+{# 
+                    <li class="list-group-item">
+                    <div class="text-danger">Structure : </div>
+                    <div>{{item.properties.c_structure_rais}}</div>
+                    <div> {{item.properties.c_structure_num}} {{item.properties.c_structure_voie}}</div>
+                    <div>{{item.properties.c_structure_cp}} {{item.properties.c_structure_com}}</div>
+
+                    </li> #}
+
+
+{# 
+https://developers.google.com/maps/documentation/directions/quickstart #}
+<script src="{{asset("geolocalisation.js")}}"></script>
+{% endblock %}

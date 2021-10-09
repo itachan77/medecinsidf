@@ -1,0 +1,10 @@
+{
+    "nom":"manette",
+    "prenom":"chantal",
+    "adresse":
+        {"codePostal":"93600", 
+        "ville":"aulnaySousBois",
+        "rue":"Pimodan", 
+        "voie":"77"
+        }
+}

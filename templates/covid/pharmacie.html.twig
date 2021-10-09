@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+
+{% block style %}
+
+#id1 {
+margin-top:250px;
+}
+
+#id1 #pharma1,#pharma2 {
+
+    background-color:rgb(0,162,232);
+    padding:50px;
+    border-radius:10px;
+    border:1px solid black;
+    margin-bottom:10px;
+
+    box-shadow:3px 3px 3px black;
+}
+
+
+#id1 form select {
+    display:block;
+    
+    margin:auto;
+    
+    border:1px solid black;
+}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<div id="id1" >
+    <form id="myForm" name="pharmacies">
+        <select id="pharma1" name="titre[pharmacie]">
+            {% for row in pharmacie %}
+            <option value="{{row.id}}">{{row.titre}}</option>
+            {% endfor %}
+        </select>
+
+        <select id="pharma2" name="adresseVille[pharmacie]">
+            {% for row in pharmacie %}
+            <option id="cityPharma{{row.id}}" data-ville="{{row.adresseVille|raw}}" value="{{row.id}}" selected="">{{row.adresseVille|raw}}</option>
+            {% endfor %}
+        </select>
+
+        <select type="hidden" id="pharmaTwo" name="adresseVille[pharmacie]">
+            {% for row in pharmacie %}
+            <option  id="villePharma{{row.id}}" data-ville="{{row.adresseVille|raw}}" value="{{row.id}}" selected="">{{row.adresseVille|raw}}</option>
+            {% endfor %}
+        </select>
+
+        <div class="text-center mt-5"><input class="btn btn-danger" id="button" onclick="monVar.monForm()" type="button" value="valider"></div>
+    <form>
+</div>
+
+
+<div id="container">
+
+</div>
+
+
+<a name="google1" href="#google2">Google1</a>
+
+<div> Moteur de recherche <a name="google2" href='google.fr'>Google2</a></div>
+
+
+<div id="nom"></div>
+<div id="prenom"></div>
+<div id="location"></div>
+<div id="monmail">itachan77@orange.fr</div>
+
+
+<div id="pathName" data-path="{{ path("med") }}"></div>
+
+
+<input type="button" onclick="ajaxJson()" value="activer fonction ajaxJson"/>
+
+
+
+
+
+
+
+
+        {% block javascripts %}
+        <script src="{{asset('apiJquery.js')}}"></script>
+        <script src="{{asset('ajax.js')}}"></script>
+        {% endblock %}
+{% endblock %}

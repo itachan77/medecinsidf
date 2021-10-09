@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CovidController!{% endblock %}
+
+{% block body %}
+
+
+<div class="bg-warning">
+    <h1>bonjour</h1>
+
+
+{#  covidTab : variable du tableau que j'ai créé dans le controller
+    FranceGlobalLiveData : nom du tableau que l'on peut trouver en renseignant key dans la boucle for
+    0 : niveau du tableau 
+    reanimation : titre (ou clé) de la valeur particulière
+#}
+
+    {% for item in covidTab %}
+        
+    {% endfor %}
+
+
+
+    {% for item in covidTab.FranceGlobalLiveData.0 %}
+
+        {{dump(item)}}
+    {% endfor %}
+
+
+    Réanimation : 
+    {{ covidTab.FranceGlobalLiveData.0.reanimation }}
+
+
+
+
+
+
+
+
+<table border width="50%" align="center" style="border-collapse:collapse">
+    <tr>
+        <th>nom</th>
+        <th>code</th>  
+        <th>date</th>  
+        <th>hospitalises</th>  
+        <th>reanimation</th>
+        <th>nouvellesHospitalisations</th>  
+        <th>nouvellesReanimations</th>  
+        <th>deces</th>  
+        <th>gueris</th>
+
+        
+    </tr>
+
+    <tr>
+
+            <td>{{ covidTab.FranceGlobalLiveData.0.nom }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.code }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.date }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.hospitalises }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.reanimation }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.nouvellesHospitalisations }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.nouvellesReanimations }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.deces }}</td>
+            <td>{{ covidTab.FranceGlobalLiveData.0.gueris }}</td>
+            
+            
+
+    </tr>
+
+</table>
+
+
+
+</div>
+{% endblock %}

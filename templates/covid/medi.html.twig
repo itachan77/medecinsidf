@@ -1,0 +1,216 @@
+{% extends 'base.html.twig' %}
+
+{% block scriptMap %}
+{# <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpJWVFy78NOp8wccPJcHjB0sw446OA9cM">
+</script>
+
+
+
+
+<script type="text/javascript">
+        function initialiserCarte() {
+        
+                varcentreGoogleMap = new google.maps.LatLng(48.111411, -1.680073);
+                
+                var optionsGoogleMap = {
+                zoom:8, 
+                center:centreGoogleMap, 
+                mapTypeId:google.maps.MapTypeId.ROADMAP 
+                }
+                
+                var maCarte = new google.maps.Map (document.getElementById("maCarte"), optionsGoogleMap);
+        }
+
+</script> #}
+
+{% endblock %}
+
+
+{% block body %}
+
+
+
+
+
+
+
+
+<div class="container" onload="initialiserCarte()">
+
+
+
+
+
+
+
+<div class="h1 text-center">Choisissez votre centre de vaccination</div>
+
+        <div class="text-center mx-auto bg-dark">
+                <form class="row align-items-center mx-auto text-center" name="regionSelect" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group text-warning h4 col-sm-6 mx-auto">
+                              <label for="inputRegion">Choisissez une région</label>
+                              <select data-region="{{dataRegion}}" id="inputRegion" name="region[code]" class="form-control btnRegion">
+                                <option selected>Région...</option>
+                                {% for region in regions %}
+                                <option value="{{region.code}}">{{region.name}}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                </form>
+                
+                <form class="row align-items-center" name="departementSelect" method="post">
+                        <div class="col-sm-12">
+                            <div class="form-group h4 text-danger col-md-6 mx-auto">
+                              <label for="inputDpt">Choisissez un département</label>
+                              <select id="inputDpt" data-dpt="{{dataDpt}}" name="departement" class="btnDpt form-control">
+                                <option selected>Choisissez un département...</option>
+                                {% for departement in departements %}
+
+                                <option value="{{departement.regionCode}}-{{departement.code}}">{{departement.name}}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                        <div class="col-sm-12">
+                </form>
+
+                <form action="{{path('med')}}" class="row align-items-center" name="villeSelect" method="post" class="villeJs" >
+                        <div class="col-sm-12">
+                            <div class="form-group h4 text-info col-md-6 mx-auto">
+                              <label for="inputVille">Choisissez une Ville</label>
+                              <select id="inputVille" name="ville[code]" data-city="{{dataVille}}" class="btnVille form-control">
+                                <option selected>Choisissez une ville...</option>
+                                {% for codeVille in codeVilles %}
+                                <option id="optionVille" class="optionId" data-ville="{{codeVille.ville}}" data-id="{{codeVille.id}}" value="{{codeVille.codePostal}}-{{ codeVille.codePostal|striptags|slice(0, 2)|raw }}">{{codeVille.ville}}-{{codeVille.codePostal}}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <div id="madiv" class="col-sm-6 mx-auto">
+                                <input data-ville="{{path("med")}}" id="submitVille" class="btn btn-dark text-dark villeJs" type="submit"/>
+                            </div>
+                        </div>
+                </form>
+        </div>
+
+
+                
+<div id="maCarte" style="width:100%; height:100%"></div>
+
+        {# <div id="tabMed" data-item="{{tabMed.features[4]}}">{{tabMed.features[4]}}</div> #}
+        
+        
+
+        {# {{dump(tabMed.features[4])}} #}
+
+
+        {# Règle de parcours du tableau d'une api pour parcourir TOUTES les données #}
+
+        {# Si la propriété contient plusieurs [], parcourir la propriété avec for sans faire mention du [] et ce également pour les sous-propriétés  
+        exemple for item in tabMed.features ET item.properties.c_nom #}
+
+        <div class="row align-items-center">
+        
+        {% if codePostal != "" %}
+        
+                {% for key, item in tabMed.features %}
+                {% if item.properties.c_com_cp == codePostal %}
+        
+                <div class="card col-sm-5 m-2 pl-2 mx-auto" style="width:30rem;border-radius:10px;box-shadow:5px 5px 5px 5px black;">
+                  {# <img class="card-img-top" src="..." alt="Card image cap"> #}
+                  
+                  <div class="card-body">
+                    <p class="card-text h5 p-2" style="background-color:beige;"><span class="text-danger h6">Centre de vaccination :<br></span>{{item.properties.c_nom|upper}}</p>
+                    
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="text-white p-1" style="background-color:blue; border-radius:5px;">Adresse :</div>
+                        <div>{{item.properties.c_adr_num}} {{item.properties.c_adr_voie}}</div>
+                        <div>{{item.properties.c_com_cp}} {{item.properties.c_com_nom}}</div>
+                        <div><i class="fas fa-phone-square-alt"></i> {{item.properties.c_rdv_tel}}</div>
+                        {% if item.properties.c_lieu_accessibilite == "OUI" %}
+                        <div><i class="fas fa-wheelchair"></i>Adapté aux personnes à mobilité réduite </div>
+                        {% endif %}
+
+                    </li>
+                        
+                    <li class="list-group-item">
+                    <div class="text-white p-1" style="background-color:blue; border-radius:5px;">Structure : </div>
+                    <div>{{item.properties.c_structure_rais}}</div>
+                    <div> {{item.properties.c_structure_num}} {{item.properties.c_structure_voie}}</div>
+                    <div>{{item.properties.c_structure_cp}} {{item.properties.c_structure_com}}</div>
+                    </li>
+
+                    <li class="list-group-item">
+                    
+                    {% if item.properties.c_rdv_lundi or item.properties.c_rdv_mardi or item.properties.c_rdv_mercredi or item.properties.c_rdv_jeudi or item.properties.c_rdv_vendredi or item.properties.c_rdv_samedi or item.properties.c_rdv_dimanche is not null %}
+                    <div class="text-white p-1" style="background-color:blue; border-radius:5px;">Jours et horaires d'ouverture :</div>
+                    {% endif %}
+                    
+                    <div class="row">
+                      <div class="col-sm-6">
+                    {% if item.properties.c_rdv_lundi != "" %}<div>Lundi : {{item.properties.c_rdv_lundi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_mardi != "" %}<div>Mardi : {{item.properties.c_rdv_mardi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_mercredi != "" %}<div>Mercredi : {{item.properties.c_rdv_mercredi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_jeudi != "" %}<div>Jeudi : {{item.properties.c_rdv_jeudi}}</div>{% endif %}
+                      </div>
+                      
+                      <div class="col-sm-6">
+                    {% if item.properties.c_rdv_vendredi != "" %}<div>Vendredi : {{item.properties.c_rdv_vendredi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_samedi != "" %}<div>Samedi : {{item.properties.c_rdv_samedi}}</div>{% endif %}
+                    {% if item.properties.c_rdv_dimanche != "" %}<div>Dimanche : {{item.properties.c_rdv_dimanche}}</div>{% endif %}
+                      </div>
+                    </div>
+                    
+                    </li>
+                  </ul>
+                  <div class="card-body">
+                    <div><a href="{{item.properties.c_rdv_site_web}}" class="card-link"><i class="far fa-calendar-alt text-primary"></i> Prendre rendez-vous sur Doctolib</a></div>
+                    <div><a href="https://www.google.fr/maps/@{{item.properties.c_lat_coor1}},{{item.properties.c_long_coor1}},14z" class="card-link"><i class="fas fa-map-marker-alt"></i> Voir l'adresse sur Google Map</a></div>
+                    
+                    {# https://maps.google.com/maps?q=48.9259008,2.4936448/43.112884,5.9368394/@45.9314764,-0.366382,6z/am=t/data=!3m1!4b1!4m4!4m3!1m1!4e1!1m0?hl=fr-FR                     #}
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 row"> 
+
+                  {# https://maps.google.com/maps?q=77%20rue%20de%20Pimodan,%20aulnay%20sous%20bois&t=&z=13&ie=UTF8&iwloc=&output=embed #}
+                  
+                  <div class="mapouter col-sm-12"><div class="gmap_canvas"><iframe width="400" height="300" id="gmap_canvas" src="https://maps.google.com/maps?q={{item.properties.c_adr_num}}{{item.properties.c_adr_voie}}{{item.properties.c_com_cp}}{{item.properties.c_com_nom}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="1" scrolling="no" marginheight="0" marginwidth="0"></iframe><br><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style><a href="https://www.embedgooglemap.net">google map embed iframe</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div></div>
+
+
+                </div>
+    {# file:///G:/projets/themes%20wordpress/TB%20Medicare-Plus-Medical-Health-HTML-Template/01_02_home_2.html #}
+    {# file:///G:/projets/themes%20wordpress/TB%20edubin-education-html-template/courses-singel.html #}
+    {# file:///G:/projets/themes%20wordpress/Ecova-Environmental-Bootstrap-Template/causes-list.html #}
+                {% endif %}
+                {% endfor %}
+                
+
+        {% endif %}
+        </div>
+
+
+
+
+</div>
+{# 
+                    <li class="list-group-item">
+                    <div class="text-danger">Structure : </div>
+                    <div>{{item.properties.c_structure_rais}}</div>
+                    <div> {{item.properties.c_structure_num}} {{item.properties.c_structure_voie}}</div>
+                    <div>{{item.properties.c_structure_cp}} {{item.properties.c_structure_com}}</div>
+
+                    </li> #}
+
+
+{# 
+https://developers.google.com/maps/documentation/directions/quickstart #}
+
+<script src="{{asset("geolocalisation.js")}}">
+
+
+
+</script>
+{% endblock %}
