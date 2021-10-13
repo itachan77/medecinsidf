@@ -1,6 +1,23 @@
-import React from 'react';
+import axios from 'axios';
 
+//j'implémente la clef d'api youtube que j'ai récupéré
 
-const ApiHref = "https://data.iledefrance.fr/api/records/1.0/search/?dataset=annuaire-et-localisation-des-professionnels-de-sante&q=&rows=9999&facet=civilite&facet=exercice_particulier&facet=nature_exercice&facet=convention&facet=sesam_vitale&facet=types_actes&facet=codes_ccam&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=nom_com&facet=libelle_profession";
+//chantalmanette741
+//console.developers.google.com
 
-export default ApiHref;
+// Il faut faire npm install axios pour que axios fonctionne
+export default axios.create({
+    baseURL: 'https://data.iledefrance.fr/api/records/1.0/',
+    params: {
+        //part veut dire qu'on récupère une partie de l'information. Ces propriétés sont indiquées dans la doc de l'api en question. Ici,
+        //on peut savoir quel info mettre grace à la doc en question qui se trouve à cette adresse : 
+        //developers.google.com/youtube/v3/docs/search/list
+        
+
+        dataset: "annuaire-et-localisation-des-professionnels-de-sante",
+
+ 
+        
+        
+   }
+})

@@ -1,4 +1,5 @@
 import React from 'react';
+import Service from './Service.js'
 
 
 
@@ -69,12 +70,17 @@ class OptionVille extends React.Component {
             
 
             <span>
-                <label className="text-success mt-4" htmlfor="inputVille">Choisissez une ville</label>
+                <label className="text-success mt-4" htmlFor="inputVille">Choisissez une ville</label>
                     <select onChange={this.onChange.bind(this)} id="inputVille" name="ville" className="btnVille form-control">
                         
                         {this.state.Villes.map(ville => (<option key={ville.id} className="btnVille" value={ville.codePostal}>{ville.ville}</option>))}
                     </select>
+                    {this.state.villeSelect == "aucune selection" ? "" : 
+                    
+                        <Service codepostal={this.state.villeSelect}/>
+                    }
             </span>
+            
             
 
         );

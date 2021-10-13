@@ -14,9 +14,6 @@ class OptionDpt extends React.Component {
             },
         ],
         departementSelect:"aucune selection",
-
-
-
     }
 
     componentDidMount() {
@@ -74,7 +71,7 @@ class OptionDpt extends React.Component {
             <div className="form-group h4 text-danger col-sm-12 mx-auto">
             
             <span>
-                <label htmlfor="inputDpt">Choisissez un département</label>    
+                <label htmlFor="inputDpt">Choisissez un département</label>    
                     <select onChange={this.onChange.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control">
                         {this.state.Dpts.map(departement => (<option key={departement.id} className="btnDpt" value={departement.code}>{departement.name}</option>))}
                     </select>
@@ -84,7 +81,7 @@ class OptionDpt extends React.Component {
                 {this.state.departementSelect == "aucune selection" ? 
     
                 // <span>
-                //     <label className="text-success mt-4" htmlfor="inputVille">Choisissez une ville</label>
+                //     <label className="text-success mt-4" htmlFor="inputVille">Choisissez une ville</label>
                 //         <select id="inputVille" name="ville" className="btnVille form-control">
                 //             <option>aucune ville</option>
                 //         </select>

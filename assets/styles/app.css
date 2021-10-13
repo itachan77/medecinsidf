@@ -1,3 +1,19 @@
 body {
     background-color: lightgray;
 }
+
+.specialite {
+    box-shadow:5px 5px 5px black;border-radius:15px;background-color:beige;
+}
+
+.minimenu {
+    box-shadow:5px 5px 5px black;border-radius:5px;
+}
+
+.informationsdiverses {
+    background-color:blue; border-radius:5px;
+}
+
+.actes {
+    height:100px;overflow:auto
+}

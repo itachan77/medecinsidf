@@ -1,7 +1,8 @@
 import React from 'react';
 import OptionRegion from './OptionRegion.js'
 import OptionDpt from './OptionDpt.js'
-import OptionVille from './OptionVille.js'
+
+
 
 
 
@@ -88,18 +89,23 @@ class Input extends React.Component {
                 {this.state.regionSelect == "aucune selection" ? 
 
                     <div className="form-group h4 text-danger col-sm-12 mx-auto">
-                        <label htmlfor="inputDpt">Choisissez un département</label>
+                        <label htmlFor="inputDpt">Choisissez un département</label>
                             <select id="inputDpt" name="departement" className="btnDpt form-control">
                                 <option>Rien dpt</option>
                             </select>
                     </div> 
                 
-                    : <OptionDpt codeRegion={this.state.regionSelect} />
+                    : 
+                    <OptionDpt codeRegion={this.state.regionSelect} />
+                    
     
                 }
 
                 
                 {/* <OptionVille codeDpt={this.state.departementSelect}/> */}
+                
+                
+                
             </div>
         );
     }
