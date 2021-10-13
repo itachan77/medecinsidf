@@ -13,6 +13,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MedecinsController extends AbstractController
 {
+
+    /**
+     * @Route("/", name="index")
+     */
+    public function index(Request $request): Response
+    {
+
+
+        return $this->render('medecins/index.html.twig', [
+            'controller_name' => 'ComposantsController',
+        ]);
+  
+    }  
+
+
+
+
+
+
+
+
+
     /**
      * @Route("/regions", name="region")
      */
@@ -43,13 +65,23 @@ class MedecinsController extends AbstractController
     
     
     /**
-     * @Route("/departements", name="departement")
+     * @Route("/departements/{codeRegion}", name="departement")
      */
-    public function departements(DepartmentsRepository $departementsRepository): Response
+    public function departements(DepartmentsRepository $departementsRepository, $codeRegion): Response
     {
 
+        //la donnée $codeRegion vient de reactjs quand je choisis une région
             /***********DATA REGION */
-        $departements=$departementsRepository->findAll();
+            
+        if ($codeRegion != "aucune selection") {
+            
+            $departements=$departementsRepository->findBy(["regionCode"=>$codeRegion]);
+        }
+        else {
+            $departements=$departementsRepository->findAll();
+        }
+        
+        
         $departement=[];
         if ($departements)
         {
@@ -72,20 +104,20 @@ class MedecinsController extends AbstractController
     
 
     /**
-     * @Route("/villes", name="ville")
+     * @Route("/villes/{codeDpt}", name="ville")
      */
-    public function villes(CpvilleRepository $cpvillesRepository): Response
+    public function villes(CpvilleRepository $cpvillesRepository, $codeDpt): Response
     {
 
             /***********DATA REGION */
-        $cpvilles=$cpvillesRepository->findAll();
+        $cpvilles=$cpvillesRepository->findBy(["departmentCode" => $codeDpt]);
         $ville=[];
         if ($cpvilles)
         {
             foreach($cpvilles as $val) {
                 $ville[]=[
                     'id'=>$val->getId(),
-                    'villes'=>$val->getVille(),
+                    'ville'=>$val->getVille(),
                     'codePostal'=>$val->getCodePostal(),
                     'departmentCode'=>$val->getDepartmentCode(),];
             }
@@ -109,9 +141,10 @@ class MedecinsController extends AbstractController
             'GET', "https://data.iledefrance.fr/api/records/1.0/search/?dataset=annuaire-et-localisation-des-professionnels-de-sante&q=&rows=9999&facet=civilite&facet=exercice_particulier&facet=nature_exercice&facet=convention&facet=sesam_vitale&facet=types_actes&facet=codes_ccam&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=nom_com&facet=libelle_profession",
         );
         //JsonResponse retourne une valeur en Json. ex: {"id":11,"nomDiscipline":"Anglais","isDone":false}
-        $response = new JsonResponse();
 
-        return $response->setData($api); //(le paramètre comme $discipline correspond toujours à un tableau)
+dd("https://data.iledefrance.fr/api/records/1.0/search/?dataset=annuaire-et-localisation-des-professionnels-de-sante&q=&rows=9999&facet=civilite&facet=exercice_particulier&facet=nature_exercice&facet=convention&facet=sesam_vitale&facet=types_actes&facet=codes_ccam&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=nom_com&facet=libelle_profession",
+");
+        return $api; //(le paramètre comme $discipline correspond toujours à un tableau)
   
     }  
     

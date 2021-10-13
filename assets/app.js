@@ -1,12 +1,34 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
 
-// any CSS you import will output into a single css file (app.css in this case)
+// import Index1 from './components/tableau/Index.js';
+
+import Input from './components/med/Input.js';
 import './styles/app.css';
-
-// start the Stimulus application
 import './bootstrap';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+let select = document.getElementsByClassName("react");
+
+let attributeId = select[0].getAttribute("id");
+
+if (attributeId = "root") {
+    
+    ReactDOM.render(
+        <div>
+            <Input/>
+        </div>,document.getElementById('root'),
+        );
+    
+}
+
+
+
+
+
+
+
+
+
+
+
