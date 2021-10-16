@@ -1,6 +1,6 @@
 
 // import Index1 from './components/tableau/Index.js';
-
+// import Input from './components/med/Input.js';
 import Input from './components/med/Input.js';
 import './styles/app.css';
 import './bootstrap';
@@ -21,6 +21,8 @@ if (attributeId = "root") {
         );
     
 }
+
+//autocomplete : npm add react-autocomplete-hint axios
 
 
 

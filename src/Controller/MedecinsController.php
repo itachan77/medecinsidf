@@ -6,6 +6,7 @@ use App\Service\CallApiService;
 use App\Repository\CpvilleRepository;
 use App\Repository\RegionsRepository;
 use App\Repository\DepartmentsRepository;
+use App\Repository\ProfessionMdcRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -124,6 +125,32 @@ class MedecinsController extends AbstractController
 
         return $response->setData($ville); //(le paramètre comme $discipline correspond toujours à un tableau)
   
+    }  
+
+
+        /**
+     * @Route("/specialite/", name="specialite")
+     */
+    public function specialite(ProfessionMdcRepository $professionMdcRepository): Response
+    {
+
+            /***********DATA REGION */
+        $specialite=$professionMdcRepository->findAll();
+        $tabSpecialite=[];
+
+        if ($specialite)
+        {
+            foreach($specialite as $val) {
+                $tabSpecialite[]=[
+                    'id'=>$val->getId(),
+                    'libelleProfession'=>$val->getLibelleProfession()];
+            }
+        }
+
+        $response = new JsonResponse();
+
+        return $response->setData($tabSpecialite); 
+
     }  
 
     /**
