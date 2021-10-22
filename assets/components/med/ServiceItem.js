@@ -1,6 +1,8 @@
 import React from 'react';
 
-const ServiceItem = ({item}) => (
+
+
+const ServiceItem = ({item, error}) => {
     // {item.fields.nom_dep}
     // <div>
     // {item.fields.record_timestamp == null ? "est indéfini" : item.fields.record_timestamp}
@@ -29,109 +31,115 @@ const ServiceItem = ({item}) => (
     telephone: "01.34.20.96.96"
     types_actes: "Actes de chirurgie,Actes d'anesthésie,Actes techniques médicaux (hors imagerie)"
     */
-
-
-    <div id="wrapper-container" className="site-wrapper-container">
-
-        <div id="main-content" className="site-main-content">
-            <section className="site-content-area">
-                <div className="uni-services-body">
-
-                    <div className="uni-our-services-2 uni-background-1">
-                        <div className="container">
-
-                            <div className="mb-2 specialite">
-                                <div className="card-text h1 p-2"><span className="text-danger h5">Nom et spécialité du médecin :</span>{item.fields.nom}, {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}</div>
-                                <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
-                            </div>
-
-                            <div className="uni-our-service-2-body minimenu">
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <div className="tab-nav">
-                                            <ul className="nav-pills nav-stacked">
-                                                <li className="active"><a href={"#tab_a" + item.recordid} data-toggle="pill">Carte et Adresse</a></li>
-                                                <li><a href={"#tab_b" + item.recordid} data-toggle="pill">Actes pratiqués</a></li>
-                                                <li><a href={"#tab_d" + item.recordid} data-toggle="pill">Renseignements divers</a></li>
-                                            </ul>
-                                        </div>
+    
+    
+    if (item.fields != undefined) {
+     
+        return <div id="wrapper-container" className="site-wrapper-container mx-auto">
+    
+            <div id="main-content" className="site-main-content">
+                <section className="site-content-area">
+                    <div className="uni-services-body">
+    
+                        <div className="uni-our-services-2 uni-background-1">
+                            <div className="container">
+    
+                                <div className="mb-2 specialite">
+                                    <div className="card-text h1 p-2 text-center">
+                                        <div className="text-danger h5 text-center mt-1">Nom, {error} spécialité et nature de l'exercice du médecin {item.length}:</div>
+                                        {item.fields.nom}, {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}, {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
                                     </div>
-                                    <div className="col-md-9">
-                                        <div className="tab-content">
-                                            <div className="tab-pane active" id={"tab_a" + item.recordid}>
-                                                <div className="uni-our-service-2-content-default">
-                                                    <div className="row">
-                                                        <div className="col-md-6">
-                                                                <div className="mapouter"><div className="gmap_canvas"><iframe width="400" height="300" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe></div></div>
-                                                        </div>
-                                                        <div className="col-md-6">
-                                                            <div className="item-caption">
-                                                                <div className="item-caption-title">
-                                                                    <h3>ADRESSE</h3>
-                                                                    <div className="uni-line"></div>
-                                                                </div>
-                                                                <div>{item.fields.adresse}</div>
-                                                                
-                                                                {item.fields.telephone != null ? <div className="item-caption-title mt-2"><h3>TEL.</h3><div className="uni-line"></div><div><i className="fas fa-phone-square-alt"></i> {item.fields.telephone}</div></div> : "est nul"}
-
-                                                                <div className="mx-auto"><button className="btn btn-primary mx-auto"><a className="text-white" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
-                                                                
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
+                                </div>
+    
+                                <div className="uni-our-service-2-body minimenu">
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            <div className="tab-nav">
+                                                <ul className="nav-pills nav-stacked">
+                                                    <li className="active"><a href={"#tab_a" + item.recordid} data-toggle="pill">Carte et Adresse</a></li>
+                                                    <li><a href={"#tab_b" + item.recordid} data-toggle="pill">Actes pratiqués</a></li>
+                                                    <li><a href={"#tab_d" + item.recordid} data-toggle="pill">Renseignements divers</a></li>
+                                                </ul>
                                             </div>
-
-                                            <div className="tab-pane" id={"tab_b" + item.recordid}>
-                                                <div className="uni-our-service-2-content-default">
-                                                    <div className="row">
-  
-                                                        <div className="col-md-12">
-                                                            <div className="item-caption">
-                                                                <div className="item-caption-title mt-3">
-                                                                    <h3>ACTES PRATIQUES</h3>
-                                                                    <div className="uni-line"></div>
-                                                                </div>
-                                                                
-                                                                {item.fields.actes != null ?
-                                                                <div>
-                                                                    <span className="text-primary h4">Actes</span>
-                                                                    <div className="mb-4 actes">{item.fields.actes}</div>
-                                                                </div>
-                                                                : ""
-                                                                }
-                                                                
-                                                                 
-                                                                {item.fields.types_actes != null ?  
-                                                                <div>
-                                                                    <span className="text-primary h4">Type</span>
-                                                                    <div className="actes">{item.fields.types_actes}</div>
+                                        </div>
+                                        <div className="col-md-9">
+                                            <div className="tab-content">
+                                                <div className="tab-pane active" id={"tab_a" + item.recordid}>
+                                                    <div className="uni-our-service-2-content-default">
+                                                        <div className="row">
+                                                            <div className="col-md-6">
+                                                                    <div className="mapouter"><div className="gmap_canvas"><iframe width="400" height="300" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe></div></div>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <div className="item-caption">
+                                                                    <div className="item-caption-title">
+                                                                        <h3>ADRESSE</h3>
+                                                                        <div className="uni-line"></div>
+                                                                    </div>
+                                                                    <div>{item.fields.adresse}</div>
+                                                                    
+                                                                    {item.fields.telephone != null ? <div className="item-caption-title mt-2"><h3>TEL.</h3><div className="uni-line"></div><div><i className="fas fa-phone-square-alt"></i> {item.fields.telephone}</div></div> : "est nul"}
+    
+                                                                    <div className="mx-auto"><button className="btn btn-primary mx-auto"><a className="text-white" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
                                                                     
                                                                 </div>
-                                                                
-                                                                : <span className="text-primary h4">Aucun acte renseigné.</span> }  
-
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div className="tab-pane" id={"tab_d" + item.recordid}>
-                                                <div className="uni-our-service-2-content-default">
-                                                    <div className="row">
-                                                        <div className="col-md-12">
-                                                            <div className="item-caption">
-                                                                <div className="item-caption-title mt-3">
-                                                                    <h3>INFORMATIONS DIVERSES</h3>
-                                                                    <div className="uni-line"></div>
+    
+                                                <div className="tab-pane" id={"tab_b" + item.recordid}>
+                                                    <div className="uni-our-service-2-content-default">
+                                                        <div className="row">
+      
+                                                            <div className="col-md-12">
+                                                                <div className="item-caption">
+                                                                    <div className="item-caption-title mt-3">
+                                                                        <h3>ACTES PRATIQUES</h3>
+                                                                        <div className="uni-line"></div>
+                                                                    </div>
+                                                                    
+                                                                    {item.fields.actes != null ?
+                                                                    <div>
+                                                                        <span className="text-primary h4">Actes</span>
+                                                                        <div className="mb-4 actes">{item.fields.actes}</div>
+                                                                    </div>
+                                                                    : ""
+                                                                    }
+                                                                    
+                                                                     
+                                                                    {item.fields.types_actes != null ?  
+                                                                    <div>
+                                                                        <span className="text-primary h4">Type</span>
+                                                                        <div className="actes">{item.fields.types_actes}</div>
+                                                                        
+                                                                    </div>
+                                                                    
+                                                                    : <span className="text-primary h4">Aucun acte renseigné.</span> }  
+    
                                                                 </div>
-                                                                    <li className="list-group-item">
-                                                                    <div className="text-white mb-2 p-1 informationsdiverses">Informations diverses </div>
-                                                                    <div>{item.fields.sesam_vitale}</div>
-                                                                    <div>Code profession : {item.fields.code_profession}</div>
-                                                                    </li>
-
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                                <div className="tab-pane" id={"tab_d" + item.recordid}>
+                                                    <div className="uni-our-service-2-content-default">
+                                                        <div className="row">
+                                                            <div className="col-md-12">
+                                                                <div className="item-caption">
+                                                                    <div className="item-caption-title mt-3">
+                                                                        <h3>INFORMATIONS DIVERSES</h3>
+                                                                        <div className="uni-line"></div>
+                                                                    </div>
+                                                                        <li className="list-group-item">
+                                                                        <div className="text-white mb-2 p-1 informationsdiverses">Informations diverses </div>
+                                                                        <div>{item.fields.sesam_vitale}</div>
+                                                                        <div>Code profession : {item.fields.code_profession}</div>
+                                                                        </li>
+    
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -140,22 +148,24 @@ const ServiceItem = ({item}) => (
                                         </div>
                                     </div>
                                 </div>
+    
+    
                             </div>
-
-
                         </div>
+    
                     </div>
-
-                </div>
-            </section>
+                </section>
+            </div>
+            
         </div>
-        
-    </div>
+    
+    }
+    else if (item == undefined) {
+        return <p>rien</p>
+    }
 
 
-
-
-)
+}
 
 export default ServiceItem;
 

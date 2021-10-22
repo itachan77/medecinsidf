@@ -135,7 +135,7 @@ class MedecinsController extends AbstractController
     {
 
             /***********DATA REGION */
-        $specialite=$professionMdcRepository->findAll();
+        $specialite=$professionMdcRepository->findByASC();
         $tabSpecialite=[];
 
         if ($specialite)
@@ -143,7 +143,8 @@ class MedecinsController extends AbstractController
             foreach($specialite as $val) {
                 $tabSpecialite[]=[
                     'id'=>$val->getId(),
-                    'libelleProfession'=>$val->getLibelleProfession()];
+                    'libelleProfession'=>$val->getLibelleProfession(),
+                    'codeProfession'=>$val->getCodeProfession()];
             }
         }
 

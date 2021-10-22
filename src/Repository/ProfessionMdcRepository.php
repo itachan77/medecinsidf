@@ -19,6 +19,18 @@ class ProfessionMdcRepository extends ServiceEntityRepository
         parent::__construct($registry, ProfessionMdc::class);
     }
 
+
+
+    public function findByASC()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.libelleProfession', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return ProfessionMdc[] Returns an array of ProfessionMdc objects
     //  */

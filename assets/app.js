@@ -16,7 +16,7 @@ if (attributeId = "root") {
     
     ReactDOM.render(
         <div>
-            <Input/>
+            <Input />
         </div>,document.getElementById('root'),
         );
     
