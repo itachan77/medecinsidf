@@ -47,4 +47,13 @@ class DepartmentsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findByASC()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

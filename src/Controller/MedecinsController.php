@@ -46,6 +46,7 @@ class MedecinsController extends AbstractController
                 $region[]=[
                     'id'=>$val->getId(),
                     'code'=>$val->getCode(),
+                    'slug'=>$val->getSlug(),
                     'name'=>$val->getName(),];
             }
         }
@@ -74,7 +75,7 @@ class MedecinsController extends AbstractController
             $departements=$departementsRepository->findBy(["regionCode"=>$codeRegion]);
         }
         else {
-            $departements=$departementsRepository->findAll();
+            $departements=$departementsRepository->findByASC();
         }
         
         
@@ -86,6 +87,7 @@ class MedecinsController extends AbstractController
                     'id'=>$val->getId(),
                     'code'=>$val->getCode(),
                     'name'=>$val->getName(),
+                    'slug'=>$val->getSlug(),
                     'regionCode'=>$val->getRegionCode(),];
             }
         }

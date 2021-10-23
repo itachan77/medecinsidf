@@ -35,7 +35,7 @@ const ServiceItem = ({item, error}) => {
     
     if (item.fields != undefined) {
      
-        return <div id="wrapper-container" className="site-wrapper-container mx-auto">
+return <div id="wrapper-container" className="site-wrapper-container mx-auto">
     
             <div id="main-content" className="site-main-content">
                 <section className="site-content-area">
@@ -45,9 +45,9 @@ const ServiceItem = ({item, error}) => {
                             <div className="container">
     
                                 <div className="mb-2 specialite">
-                                    <div className="card-text h1 p-2 text-center">
+                                    <div className="card-text h2 p-1 text-center">
                                         <div className="text-danger h5 text-center mt-1">Nom, {error} spécialité et nature de l'exercice du médecin {item.length}:</div>
-                                        {item.fields.nom}, {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}, {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
+                                        {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
                                     </div>
                                     <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
                                 </div>
@@ -67,24 +67,37 @@ const ServiceItem = ({item, error}) => {
                                             <div className="tab-content">
                                                 <div className="tab-pane active" id={"tab_a" + item.recordid}>
                                                     <div className="uni-our-service-2-content-default">
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                    <div className="mapouter"><div className="gmap_canvas"><iframe width="400" height="300" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe></div></div>
+                                                        <div className="row col-sm-12 mx-auto">
+                                                            <div className="col-sm-5">
+                                                                    <div className="mapouter"><div className="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe></div></div>
                                                             </div>
-                                                            <div className="col-md-6">
-                                                                <div className="item-caption">
-                                                                    <div className="item-caption-title">
+                                                            <div className="col-sm-5 pl-5">
+                                                                <div className="item-caption row">
+                                                                    <div className="item-caption-title col-sm-12">
                                                                         <h3>ADRESSE</h3>
                                                                         <div className="uni-line"></div>
+                                                                        <div>{item.fields.adresse}</div>
                                                                     </div>
-                                                                    <div>{item.fields.adresse}</div>
                                                                     
-                                                                    {item.fields.telephone != null ? <div className="item-caption-title mt-2"><h3>TEL.</h3><div className="uni-line"></div><div><i className="fas fa-phone-square-alt"></i> {item.fields.telephone}</div></div> : "est nul"}
-    
-                                                                    <div className="mx-auto"><button className="btn btn-primary mx-auto"><a className="text-white" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
-                                                                    
+                                                                    <div className="item-caption-title col-sm-12">
+                                                                        {item.fields.telephone != null ? 
+                                                                            (<div>
+                                                                                <div className="item-caption-title">
+                                                                                    <h3>TEL.</h3>
+                                                                                    <div className="uni-line"></div>
+                                                                                </div>
+                                                                                <i className="fas fa-phone-square-alt"></i> 
+                                                                                <a href={"tel:" + item.fields.telephone}> {item.fields.telephone}</a>
+                                                                            </div>) 
+                                                                        : ""}
+                                                                    </div>
+
                                                                 </div>
+
                                                             </div>
+
+                                                        <div className="mx-auto mb-3"><button className="btn btn-primary mx-auto"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
+                                                                    
                                                         </div>
                                                     </div>
                                                 </div>

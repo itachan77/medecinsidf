@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+<header class="container-fluid uni-background-1 text-center pt-5">
+    <div class="text-center">
+        <!-- Page title -->
+            <div class="mx-auto">
+                <h1 class="text-center" style="color:white;font-family:Arial;font-size:35px;font-weight:bold;">MEDECINS LIBERAUX DE FRANCE</h1>
+                <div class="row text-white h1"><hr><i class="fas fa-hand-holding-medical"></i><hr></div>
+            </div>
+        <!-- End page title -->
+
+    </div>
+</header>
+
+        {# {{dump(tabMed.records[7])}} #}
+
+        {# Règle de parcours du tableau d'une api pour parcourir TOUTES les données #}
+
+        {# Si la propriété contient plusieurs [], parcourir la propriété avec for sans faire mention du [] et ce également pour les sous-propriétés  
+        exemple for item in tabMed.features ET item.properties.c_nom #}
+
+<div class="shadow-lg p-3 bg-white rounded mt-3 mx-auto" style="margin-bottom:-50px;height:auto;">
+    <div class="react" id="root"></div>
+</div>
+
+
+
+
+{% endblock %}
