@@ -37,141 +37,248 @@ const ServiceItem = ({item, error}) => {
      
 return <div id="wrapper-container" className="site-wrapper-container mx-auto">
     
-            <div id="main-content" className="site-main-content">
-                <section className="site-content-area">
-                    <div className="uni-services-body">
-    
-                        <div className="uni-our-services-2 uni-background-1">
-                            <div className="container">
-    
-                                <div className="mb-2 specialite">
-                                    <div className="card-text h2 p-1 text-center">
-                                        <div className="text-danger h5 text-center mt-1">Nom, {error} spécialité et nature de l'exercice du médecin {item.length}:</div>
-                                        {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
-                                    </div>
-                                    <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
-                                </div>
-    
-                                <div className="uni-our-service-2-body minimenu">
-                                    <div className="row">
-                                        <div className="col-md-3">
-                                            <div className="tab-nav">
-                                                <ul className="nav-pills nav-stacked">
-                                                    <li className="active"><a href={"#tab_a" + item.recordid} data-toggle="pill">Carte et Adresse</a></li>
-                                                    <li><a href={"#tab_b" + item.recordid} data-toggle="pill">Actes pratiqués</a></li>
-                                                    <li><a href={"#tab_d" + item.recordid} data-toggle="pill">Renseignements divers</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-9">
-                                            <div className="tab-content">
-                                                <div className="tab-pane active" id={"tab_a" + item.recordid}>
-                                                    <div className="uni-our-service-2-content-default">
-                                                        <div className="row col-sm-12 mx-auto">
-                                                            <div className="col-sm-5">
-                                                                    <div className="mapouter"><div className="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe></div></div>
-                                                            </div>
-                                                            <div className="col-sm-5 pl-5">
-                                                                <div className="item-caption row">
-                                                                    <div className="item-caption-title col-sm-12">
-                                                                        <h3>ADRESSE</h3>
-                                                                        <div className="uni-line"></div>
-                                                                        <div>{item.fields.adresse}</div>
-                                                                    </div>
-                                                                    
-                                                                    <div className="item-caption-title col-sm-12">
-                                                                        {item.fields.telephone != null ? 
-                                                                            (<div>
-                                                                                <div className="item-caption-title">
-                                                                                    <h3>TEL.</h3>
-                                                                                    <div className="uni-line"></div>
-                                                                                </div>
-                                                                                <i className="fas fa-phone-square-alt"></i> 
-                                                                                <a href={"tel:" + item.fields.telephone}> {item.fields.telephone}</a>
-                                                                            </div>) 
-                                                                        : ""}
-                                                                    </div>
+    <div id="main-content" className="site-main-content">
+        <section className="site-content-area">
+            <div className="uni-services-body">
 
-                                                                </div>
-
-                                                            </div>
-
-                                                        <div className="mx-auto mb-3"><button className="btn btn-primary mx-auto"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
-                                                                    
-                                                        </div>
-                                                    </div>
-                                                </div>
-    
-                                                <div className="tab-pane" id={"tab_b" + item.recordid}>
-                                                    <div className="uni-our-service-2-content-default">
-                                                        <div className="row">
-      
-                                                            <div className="col-md-12">
-                                                                <div className="item-caption">
-                                                                    <div className="item-caption-title mt-3">
-                                                                        <h3>ACTES PRATIQUES</h3>
-                                                                        <div className="uni-line"></div>
-                                                                    </div>
-                                                                    
-                                                                    {item.fields.actes != null ?
-                                                                    <div>
-                                                                        <span className="text-primary h4">Actes</span>
-                                                                        <div className="mb-4 actes">{item.fields.actes}</div>
-                                                                    </div>
-                                                                    : ""
-                                                                    }
-                                                                    
-                                                                     
-                                                                    {item.fields.types_actes != null ?  
-                                                                    <div>
-                                                                        <span className="text-primary h4">Type</span>
-                                                                        <div className="actes">{item.fields.types_actes}</div>
-                                                                        
-                                                                    </div>
-                                                                    
-                                                                    : <span className="text-primary h4">Aucun acte renseigné.</span> }  
-    
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-    
-                                                <div className="tab-pane" id={"tab_d" + item.recordid}>
-                                                    <div className="uni-our-service-2-content-default">
-                                                        <div className="row">
-                                                            <div className="col-md-12">
-                                                                <div className="item-caption">
-                                                                    <div className="item-caption-title mt-3">
-                                                                        <h3>INFORMATIONS DIVERSES</h3>
-                                                                        <div className="uni-line"></div>
-                                                                    </div>
-                                                                        <li className="list-group-item">
-                                                                        <div className="text-white mb-2 p-1 informationsdiverses">Informations diverses </div>
-                                                                        <div>{item.fields.sesam_vitale}</div>
-                                                                        <div>Code profession : {item.fields.code_profession}</div>
-                                                                        </li>
-    
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-    
-    
+                <div className="uni-our-service-2-body">
+                    <div className="row">
+                        <div className="col-md-3">
+                            <div className="tab-nav">
+                                <ul className="nav-pills nav-stacked">
+                                    <li className="active"><a href="#tab_a" data-toggle="pill">Cardiothoracic Surgery</a></li>
+                                    <li className=""><a href="#tab_b" data-toggle="pill">Corneal transplant surgery</a></li>
+                                    <li className=""><a href="#tab_c" data-toggle="pill">General health check</a></li>
+                                    <li className=""><a href="#tab_d" data-toggle="pill">Diagnosis &amp; treatment cancer</a></li>
+                                    <li className=""><a href="#tab_e" data-toggle="pill">Treatment of dermatitis</a></li>
+                                </ul>
                             </div>
                         </div>
-    
+                        <div className="col-md-9">
+                            <div className="tab-content">
+                                <div className="tab-pane active" id="tab_a">
+                                    <div className="uni-our-service-2-content-default">
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="item-img">
+                                                    <img src="file:///D:/projets/themes%20wordpress/TB%20Medicare-Plus-Medical-Health-HTML-Template/images/services/img3.jpg"></img>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-7">
+                                                <div className="item-caption">
+                                                    <div className="item-caption-title">
+                                                        <h3>Cardiothoracic Surgery</h3>
+                                                        <div className="uni-line"></div>
+                                                    </div>
+                                                    <p>Pellentesque habitant morbi tristique senectus et netus
+                                                        et malesuada fames ac turpis egestas. Vestibulum tortor
+                                                        quam, feugiat vitae, ultricies eget, tempor sit amet,
+                                                        ante. Donec eu libero sit amet quam egestas semper.
+                                                        Aenean ultricies mi vitae est. Mauris placerat eleifend
+                                                        leo.
+                                                    </p>
+                                                    <ul>
+                                                        <li>
+                                                            Lorem ipsum dolor sit amet, consectetuer
+                                                        </li>
+                                                        <li>
+                                                            Aliquam tincidunt mauris eu risus
+                                                        </li>
+                                                        <li>
+                                                            Vestibulum auctor dapibus neque
+                                                        </li>
+                                                        <li>
+                                                            Morbi in sem quis dui placerat ornare
+                                                        </li>
+                                                        <li>
+                                                            Donec eu libero sit amet quam egestas semper
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tab-pane" id="tab_b">
+                                    <div className="uni-our-service-2-content-default">
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="item-img">
+                                                    Image
+                                                </div>
+                                            </div>
+                                            <div className="col-md-7">
+                                                <div className="item-caption">
+                                                    <div className="item-caption-title">
+                                                        <h3>Corneal transplant surgery</h3>
+                                                        <div className="uni-line"></div>
+                                                    </div>
+                                                    <p>Pellentesque habitant morbi tristique senectus et netus
+                                                        et malesuada fames ac turpis egestas. Vestibulum tortor
+                                                        quam, feugiat vitae, ultricies eget, tempor sit amet,
+                                                        ante. Donec eu libero sit amet quam egestas semper.
+                                                        Aenean ultricies mi vitae est. Mauris placerat eleifend
+                                                        leo.
+                                                    </p>
+                                                    <ul>
+                                                        <li>
+                                                            Lorem ipsum dolor sit amet, consectetuer
+                                                        </li>
+                                                        <li>
+                                                            Aliquam tincidunt mauris eu risus
+                                                        </li>
+                                                        <li>
+                                                            Vestibulum auctor dapibus neque
+                                                        </li>
+                                                        <li>
+                                                            Morbi in sem quis dui placerat ornare
+                                                        </li>
+                                                        <li>
+                                                            Donec eu libero sit amet quam egestas semper
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tab-pane" id="tab_c">
+                                    <div className="uni-our-service-2-content-default">
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="item-img">
+                                                    Image
+                                                </div>
+                                            </div>
+                                            <div className="col-md-7">
+                                                <div className="item-caption">
+                                                    <div className="item-caption-title">
+                                                        <h3>General health check</h3>
+                                                        <div className="uni-line"></div>
+                                                    </div>
+                                                    <p>Pellentesque habitant morbi tristique senectus et netus
+                                                        et malesuada fames ac turpis egestas. Vestibulum tortor
+                                                        quam, feugiat vitae, ultricies eget, tempor sit amet,
+                                                        ante. Donec eu libero sit amet quam egestas semper.
+                                                        Aenean ultricies mi vitae est. Mauris placerat eleifend
+                                                        leo.
+                                                    </p>
+                                                    <ul>
+                                                        <li>
+                                                            Lorem ipsum dolor sit amet, consectetuer
+                                                        </li>
+                                                        <li>
+                                                            Aliquam tincidunt mauris eu risus
+                                                        </li>
+                                                        <li>
+                                                            Vestibulum auctor dapibus neque
+                                                        </li>
+                                                        <li>
+                                                            Morbi in sem quis dui placerat ornare
+                                                        </li>
+                                                        <li>
+                                                            Donec eu libero sit amet quam egestas semper
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tab-pane" id="tab_d">
+                                    <div className="uni-our-service-2-content-default">
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="item-img">
+                                                    Image
+                                                </div>
+                                            </div>
+                                            <div className="col-md-7">
+                                                <div className="item-caption">
+                                                    <div className="item-caption-title">
+                                                        <h3>Diagnosis &amp; treatment cancer</h3>
+                                                        <div className="uni-line"></div>
+                                                    </div>
+                                                    <p>Pellentesque habitant morbi tristique senectus et netus
+                                                        et malesuada fames ac turpis egestas. Vestibulum tortor
+                                                        quam, feugiat vitae, ultricies eget, tempor sit amet,
+                                                        ante. Donec eu libero sit amet quam egestas semper.
+                                                        Aenean ultricies mi vitae est. Mauris placerat eleifend
+                                                        leo.
+                                                    </p>
+                                                    <ul>
+                                                        <li>
+                                                            Lorem ipsum dolor sit amet, consectetuer
+                                                        </li>
+                                                        <li>
+                                                            Aliquam tincidunt mauris eu risus
+                                                        </li>
+                                                        <li>
+                                                            Vestibulum auctor dapibus neque
+                                                        </li>
+                                                        <li>
+                                                            Morbi in sem quis dui placerat ornare
+                                                        </li>
+                                                        <li>
+                                                            Donec eu libero sit amet quam egestas semper
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tab-pane" id="tab_e">
+                                    <div className="uni-our-service-2-content-default">
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="item-img">
+                                                    Image
+                                                </div>
+                                            </div>
+                                            <div className="col-md-7">
+                                                <div className="item-caption">
+                                                    <div className="item-caption-title">
+                                                        <h3>Treatment of dermatitis</h3>
+                                                        <div className="uni-line"></div>
+                                                    </div>
+                                                    <p>Pellentesque habitant morbi tristique senectus et netus
+                                                        et malesuada fames ac turpis egestas. Vestibulum tortor
+                                                        quam, feugiat vitae, ultricies eget, tempor sit amet,
+                                                        ante. Donec eu libero sit amet quam egestas semper.
+                                                        Aenean ultricies mi vitae est. Mauris placerat eleifend
+                                                        leo.
+                                                    </p>
+                                                    <ul>
+                                                        <li>
+                                                            Lorem ipsum dolor sit amet, consectetuer
+                                                        </li>
+                                                        <li>
+                                                            Aliquam tincidunt mauris eu risus
+                                                        </li>
+                                                        <li>
+                                                            Vestibulum auctor dapibus neque
+                                                        </li>
+                                                        <li>
+                                                            Morbi in sem quis dui placerat ornare
+                                                        </li>
+                                                        <li>
+                                                            Donec eu libero sit amet quam egestas semper
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </section>
+                </div>
             </div>
-            
-        </div>
-    
+        </section>
+    </div>
+</div>
     }
     else if (item == undefined) {
         return <p>rien</p>
