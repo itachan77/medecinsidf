@@ -474,6 +474,7 @@ class Input extends React.Component {
                     <div className="uni-our-services-2 uni-background-4">
                         <div className="container">
                             {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+                            {this.state.term != null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
 
 
                             

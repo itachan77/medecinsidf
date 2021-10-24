@@ -42,6 +42,7 @@ return  (
                 <div className="card-text h2 p-1 text-center">
                     <div className="text-danger h5 text-center mt-1">Nom, {error} spécialité et nature de l'exercice du médecin {item.length}:</div>
                     {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
+                    
                 </div>
                 <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
             </div>
@@ -167,31 +168,18 @@ return  (
                                         </div>
                                         <div class="uni-services-opinging-hours-content">
                                             <table class="table">
-                                                <tbody><tr>
-                                                    <td>monday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>tuesday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>wednesday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>thursday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>friday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>sunday</td>
-                                                    <td>8:00 - 17:00</td>
-                                                </tr>
+                                                <tbody>
+                                                    
+                                                {/* {item.properties.c_rdv_lundi != "" ? (<tr><td>Lundi</td><td>{item.properties.c_rdv_lundi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Mardi</td><td>{item.properties.c_rdv_mardi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Mercredi</td><td>{item.properties.c_rdv_mercredi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Jeudi</td><td>{item.properties.c_rdv_jeudi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Vendredi</td><td>{item.properties.c_rdv_vendredi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Samedi</td><td>{item.properties.c_rdv_samedi}</td></tr>) : ""}
+                                                {item.properties.c_rdv_lundi != "" ? (<tr><td>Dimanche</td><td>{item.properties.c_rdv_dimanche}</td></tr>) : ""} */}
+
                                             </tbody></table>
+
                                         </div>
                                     </div>
                                         </div>

@@ -57,8 +57,8 @@ class CallApiService {
             //"https://data.iledefrance.fr/api/records/1.0/search/?dataset=principaux-sites-touristiques-en-ile-de-france0&q=&rows=500",
             
             //Tous les professionnels de santé d'ile de france
-            "https://data.iledefrance.fr/api/records/1.0/search/?dataset=annuaire-et-localisation-des-professionnels-de-sante&q=&rows=50&facet=civilite&facet=exercice_particulier&facet=nature_exercice&facet=convention&facet=sesam_vitale&facet=types_actes&facet=codes_ccam&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=nom_com&facet=libelle_profession",
-            
+            //"https://data.iledefrance.fr/api/records/1.0/search/?dataset=annuaire-et-localisation-des-professionnels-de-sante&q=&rows=50&facet=civilite&facet=exercice_particulier&facet=nature_exercice&facet=convention&facet=sesam_vitale&facet=types_actes&facet=codes_ccam&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=nom_com",
+            //"https://public.opendatasoft.com/api/records/1.0/search/?dataset=medecins&q=&facet=civilite",
             //Tous les professionnels de santé de france 
             //"https://www.data.gouv.fr/fr/datasets/r/ca9e498b-4064-40b8-8cf0-953c34f5779c",
             
