@@ -51,7 +51,7 @@ class CallApiService {
             //"https://koumoul.com/s/data-fair/api/v1/datasets/les-aides-financieres-de-l'ademe/api-docs.json",
             
             //centres de vaccination
-            //"https://www.data.gouv.fr/fr/datasets/r/d0566522-604d-4af6-be44-a26eefa01756",
+            "https://www.data.gouv.fr/fr/datasets/r/d0566522-604d-4af6-be44-a26eefa01756",
             
             //Site touristiques d'ile de france
             //"https://data.iledefrance.fr/api/records/1.0/search/?dataset=principaux-sites-touristiques-en-ile-de-france0&q=&rows=500",
@@ -73,7 +73,7 @@ class CallApiService {
             
             
             //tous les professionnels de santé de france 2396506
-            //"https://public.opendatasoft.com/api/records/1.0/search/?dataset=medecins&q=&rows=2000&facet=civilite&facet=column_12&facet=column_13&facet=column_14&facet=column_16&facet=libelle_profession&facet=type_dacte_realise&facet=commune&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=insee_reg&facet=insee_dep&facet=libelle_regroupement&facet=libelle&facet=libelle_acte_clinique",
+            //"https://public.opendatasoft.com/api/records/1.0/search/?dataset=medecins&q=&rows=20&facet=civilite&facet=column_12&facet=column_13&facet=column_14&facet=column_16&facet=libelle_profession&facet=type_dacte_realise&facet=commune&facet=nom_epci&facet=nom_dep&facet=nom_reg&facet=insee_reg&facet=insee_dep&facet=libelle_regroupement&facet=libelle&facet=libelle_acte_clinique",
             
         );
 

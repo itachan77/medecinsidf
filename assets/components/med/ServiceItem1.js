@@ -159,15 +159,15 @@ return  (
                                 <div className="uni-our-service-2-content-default">
                                     <div className="row">
                                         <div className="col-md-12">
-                                        <div class="uni-services-opinging-hours">
-                                        <div class="uni-services-opinging-hours-title">
-                                            <div class="icon">
-                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        <div className="uni-services-opinging-hours">
+                                        <div className="uni-services-opinging-hours-title">
+                                            <div className="icon">
+                                                <i className="fa fa-clock-o" aria-hidden="true"></i>
                                             </div>
                                             <h4>Heures d'ouverture</h4>
                                         </div>
-                                        <div class="uni-services-opinging-hours-content">
-                                            <table class="table">
+                                        <div className="uni-services-opinging-hours-content">
+                                            <table className="table">
                                                 <tbody>
                                                     
                                                 {/* {item.properties.c_rdv_lundi != "" ? (<tr><td>Lundi</td><td>{item.properties.c_rdv_lundi}</td></tr>) : ""}

@@ -61,12 +61,17 @@ class Input extends React.Component {
         specialiteSelectCode:"aucune selection",
         visibility:"block", 
         term:null,
+        medecinNom:[],
 
     }
 
     
 
     componentDidMount() {
+
+        this.onListeMed();
+
+
         fetch('/specialite')
         .then(res => res.json())
         .then(Specialites => {
@@ -317,6 +322,44 @@ class Input extends React.Component {
 
 
 
+    onListeMed = async () => {
+        const reponse = await ApiHref
+        
+        .get('/search', {
+            params: {
+                "rows" : 10000, 
+                //"refine.code_profession" : specialiteSelectCode,
+                // facet : "HAUTS-DE-SEINE",
+                // facet : "nom_dep",
+        
+                //  facet: "exercice_particulier"
+                //  facet: "nature_exercice"
+                //  facet: "convention"
+                //  facet: "sesam_vitale"
+                //  facet: "types_actes"
+                //  facet: "codes_ccam"
+                //  facet: "nom_epci"
+                //  facet: "nom_dep"
+                //  facet: "nom_reg"
+                //  facet: "nom_com"
+                //  facet: "libelle_profession;"
+            }
+        })
+
+
+
+        this.setState({
+            medecinNom : reponse.data.records,
+        })
+     
+      
+        console.log("reponse.data.records[0].fields :");
+
+
+
+    }
+
+
     onTermSubmit = async (term,reg,dpt,cp,profession) => {
         const reponse = await ApiHref
         
@@ -386,10 +429,6 @@ class Input extends React.Component {
 
         return (
 
-
-
-
-
             <div>
 
                 <Header/>
@@ -405,10 +444,10 @@ class Input extends React.Component {
                                     {this.state.Specialites.map(specialite => (<option className="text-center" key={specialite.id} value={specialite.codeProfession}>{specialite.libelleProfession}</option>))}
                                 </select>
                             </div> 
-                            <div className="mx-auto form-group cadre text-center text-light h4 col-sm-5">
+                            <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-5">
                                 <div>Rechercher par nom de médecin</div>
                                 <div>-</div>
-                                <SearchBar onFormSubmit={this.onTermSubmit} specialTermProps={this.specialTerm}/> 
+                                <SearchBar onFormSubmit={this.onTermSubmit} specialTermProps={this.specialTerm} apihref={this.state.medecinNom}/> 
                             </div> 
                         
                             <div className="row col-sm-12 mx-auto">
@@ -444,14 +483,14 @@ class Input extends React.Component {
                             </div>
 
                             <div className="text-center h1 mt-5 mx-auto bord"> 
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion == "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecins exercent la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecins exercent la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecins exercent la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecins exercent la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille}</div></div>) : ""}
+                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion == "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille}</div></div>) : ""}
 
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecin exerce la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecin exerce la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">médecin exerce la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille}</div></div>) : ""}
+                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
 
                             </div> 
 
@@ -470,18 +509,17 @@ class Input extends React.Component {
                 </div>
 
                 <div className="uni-services mx-auto">
-                    {/* Affichage par Région */}
                     <div className="uni-our-services-2 uni-background-4">
                         <div className="container">
+
+                            {/* Affichage France */}
+                            {this.state.ApiHref.length < 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""} 
+                                
+                            {/* Affichage par Région */}
                             {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
                             {this.state.term != null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
 
-
-                            
-                            
                             {/* Affichage par Departement */}
-
-                        
                             {this.state.nomDpt != "" && this.state.ApiHref.length <= 90 && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
                             
 

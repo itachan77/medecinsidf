@@ -31,7 +31,6 @@ function AutoVille() {
         onChange={e => setText(e.target.value)} 
         />
 
-
       </Hint>
     </div>
   );

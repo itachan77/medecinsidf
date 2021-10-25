@@ -4,7 +4,14 @@ import { countryOptions } from "./options";
 
 import "./autofill.css";
 
+
 const Input = (props) => {
+
+  state = {
+    term: ''
+}
+
+
   const { autoComplete, onAutoFill } = props.selectProps;
 
   const onAnimationStart = !onAutoFill
@@ -20,6 +27,20 @@ const Input = (props) => {
         animationNames.includes(e.animationName) && onAutoFill(e);
       };
 
+      onChange = e => {
+        this.setState({term: e.target.value})
+    }
+
+    onSubmit = e => {
+        e.preventDefault();
+        //A compléter plus tard
+
+        //on appelle specialTerm qui modifie le state term du composant Input
+        this.props.onFormSubmit(this.state.term);
+        this.props.specialTermProps(this.state.term)
+    }
+
+
   return (
     <components.Input
       {...props}
@@ -29,7 +50,7 @@ const Input = (props) => {
   );
 };
 
-const SearchBar = (props) => {
+const ExempleSelect = (props) => {
   const options = useRef(countryOptions).current;
 
   // Expose a hook for JavaScript when autofill is shown
@@ -38,7 +59,14 @@ const SearchBar = (props) => {
 
   //        // Expose a hook for JS onAutoFillCancel
   // JavaScript can capture 'animationstart' events
-
+  const onAutoFill = (e) => {
+    if (e.animationName === "onAutoFillStart") {
+      // do something
+    }
+    if (e.animationName === "onAutoFillCancel") {
+      // do something
+    }
+  };
 
   const styles = {
     input: (css, state) => ({
@@ -54,38 +82,21 @@ const SearchBar = (props) => {
 
   return (
     <form autoComplete="on" method="POST">
-      <label htmlFor="frmNameA">Name</label>
       <Select
         styles={styles}
         placeholder="Full name"
         autoComplete="given-name"
         components={{ Input }}
         inputId="frmNameA"
-        options={[
-          {label: "Eric Bonow", value: "eb"},
-          {label: "Chantal MANETTE", value: "mc"},
-          {label: "Chantal MANETTE", value: "mc"},
-        
-        ]}
+        options={
+          countryOptions
+        }
+        value={this.state.term}
+        onChange={this.onChange}
+
       />
-
-      <label htmlFor="frmEmailA">Email</label>
-      <Select
-        placeholder="name@example.com"
-        autoComplete="email"
-        components={{ Input }}
-        inputId="frmEmailA"
-        options={options}
-      />
-
-      <label>
-        Country
-        <Select components={{ Input }} options={options} />
-      </label>
-
-      <button type={"submit"} />
     </form>
   );
 };
 
-export default SearchBar;
+export default ExempleSelect;

@@ -2,6 +2,7 @@
 // import Index1 from './components/tableau/Index.js';
 // import Input from './components/med/Input.js';
 import Input from './components/med/Input.js';
+// import SearchBar from './components/med/ExempleSelect.js';
 import './styles/app.css';
 import './bootstrap';
 import React from 'react';
