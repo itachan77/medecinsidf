@@ -40,7 +40,7 @@ return  (
         <div>
             <div className="mb-2 specialite mt-5">
                 <div className="card-text h2 p-1 text-center">
-                    <div className="text-danger h5 text-center mt-1">Nom, {error} spécialité et nature de l'exercice du médecin {item.length}:</div>
+                    <div className="text-danger h5 text-center mt-1">Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
                     {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
                     
                 </div>

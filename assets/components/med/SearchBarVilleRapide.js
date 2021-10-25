@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Hint } from 'react-autocomplete-hint';
 
 
-function AutoVille() {
+function SearchBarVille() {
   const [hintData, setHintData] = useState([])
   const [text, setText] = useState('')
 
@@ -36,4 +36,4 @@ function AutoVille() {
   );
 }
 
-export default AutoVille;
+export default SearchBarVille;

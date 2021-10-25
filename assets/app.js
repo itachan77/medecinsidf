@@ -3,6 +3,8 @@
 // import Input from './components/med/Input.js';
 import Input from './components/med/Input.js';
 // import SearchBar from './components/med/ExempleSelect.js';
+// import Autocomplete from './components/med/Autocomplete.js';
+// import AutoVille from './components/med/AutoVille.js';
 import './styles/app.css';
 import './bootstrap';
 import React from 'react';

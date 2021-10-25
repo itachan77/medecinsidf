@@ -108,16 +108,35 @@ class MedecinsController extends AbstractController
     {
 
             /***********DATA REGION */
-        $cpvilles=$cpvillesRepository->findBy(["departmentCode" => $codeDpt]);
-        $ville=[];
-        if ($cpvilles)
+
+        if($codeDpt != "toutesVilles")
         {
-            foreach($cpvilles as $val) {
-                $ville[]=[
-                    'id'=>$val->getId(),
-                    'ville'=>$val->getVille(),
-                    'codePostal'=>$val->getCodePostal(),
-                    'departmentCode'=>$val->getDepartmentCode(),];
+
+            $cpvilles=$cpvillesRepository->findBy(["departmentCode" => $codeDpt]);
+            $ville=[];
+            if ($cpvilles)
+            {
+                foreach($cpvilles as $val) {
+                    $ville[]=[
+                        'id'=>$val->getId(),
+                        'ville'=>$val->getVille(),
+                        'codePostal'=>$val->getCodePostal(),
+                        'departmentCode'=>$val->getDepartmentCode(),];
+                }
+            }
+        }
+        else {
+            $cpvilles=$cpvillesRepository->findAll();
+            $ville=[];
+            if ($cpvilles)
+            {
+                foreach($cpvilles as $val) {
+                    $ville[]=[
+                        'id'=>$val->getId(),
+                        'ville'=>$val->getVille(),
+                        'codePostal'=>$val->getCodePostal(),
+                        'departmentCode'=>$val->getDepartmentCode(),];
+                }
             }
         }
 //        $dataville = json_encode($ville);

@@ -4,10 +4,15 @@ import axios from 'axios';
 
 //chantalmanette741
 //console.developers.google.com
+//https://public.opendatasoft.com/explore/?sort=modified&q=annuaire+des+professionnels+de+sante
 
 // Il faut faire npm install axios pour que axios fonctionne
 export default axios.create({
+    //API off
     baseURL: 'https://data.opendatasoft.com/api/records/1.0/',
+    
+    //API ameliorée
+    //baseURL: 'https://public.opendatasoft.com/api/records/1.0/',
     
     // baseURL: 'https://data.iledefrance.fr/api/records/1.0/',
 
@@ -17,7 +22,12 @@ export default axios.create({
         //developers.google.com/youtube/v3/docs/search/list
 
         // dataset: "annuaire-et-localisation-des-professionnels-de-sante",
+
+        //API off
         dataset: "annuaire-des-professionnels-de-sante@public",
+
+        //API ameliorée
+        //dataset: "medecins",
         
    }
 })

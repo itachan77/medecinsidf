@@ -4,6 +4,7 @@ import ApiHref from './ApiHref.js';
 import ServiceItem from './ServiceItem1.js';
 import Header from './Header.js';
 import SearchBar from './SearchBar.js';
+import Cart from './Cart.js';
 import { isEmptyObject } from 'jquery';
 // import ExempleSelect from './ExempleSelect.js';
 // import InputRegion from './InputRegion.js';
@@ -60,7 +61,9 @@ class Input extends React.Component {
         specialiteSelect:"",
         specialiteSelectCode:"aucune selection",
         visibility:"block", 
-        term:null,
+        termVille:null,
+        termNom:null,
+        termSpec:null,
         medecinNom:[],
 
     }
@@ -69,7 +72,19 @@ class Input extends React.Component {
 
     componentDidMount() {
 
-        this.onListeMed();
+        fetch('/villes/' + "toutesVilles")
+        .then(res => res.json())
+        .then(Villes => {
+            this.setState({
+                Villes: Villes.map(ville => ({
+                id: ville.id,
+                ville:ville.ville,
+                codePostal:ville.codePostal,
+                departmentCode:ville.departmentCode,
+                })),
+                nextId: Math.max(...Villes.map(ville => ville.id)) + 1 
+        })
+        })
 
 
         fetch('/specialite')
@@ -120,7 +135,22 @@ class Input extends React.Component {
 
     }
 
-    
+    initialize(){
+
+        console.log("marche ?");
+        this.setState({
+            termNom: null,
+            termVille:null,
+            nomRegion:"",
+            nomDpt:"",
+            villeSelect:"aucune selection",
+            specialiteSelectCode:"aucune selection",
+            //ApiHref : [],
+        });
+
+
+
+    }
 
     
     componentWillReceiveProps() {
@@ -129,13 +159,25 @@ class Input extends React.Component {
         });
     }
 
-    specialTerm = (mysearch) => {
+    specialTermNom = (mysearchNom) => {
         this.setState({
-            term: mysearch
+            termNom: mysearchNom
         });
-        console.log("resultat de term :" + this.state.term)
+        console.log("resultat de termNom :" + this.state.termNom)
+    }
+    specialTermSpec = (mysearchSpec) => {
+        this.setState({
+            termSpec: mysearchSpec
+        });
+        console.log("resultat de termNom :" + this.state.termNom)
     }
     
+    specialTermVille = (mysearchVille) => {
+        this.setState({
+            termVille: mysearchVille
+        });
+        console.log("resultat de termVille :" + this.state.termVille)
+    }
     
     onChangeSpec = (e) => {
     
@@ -157,7 +199,7 @@ class Input extends React.Component {
                     
                     console.log("pour spécialite " + this.state.nomRegion == "" ? null : this.state.nomRegion, this.state.nomDpt == "" ? null:this.state.nomDpt, this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
 
-                    this.onTermSubmit(this.state.term, this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
+                    this.onTermSubmit(null, null, this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
 
                 }    
             })
@@ -189,7 +231,7 @@ class Input extends React.Component {
                         villeSelect :"aucune selection",
                     });
                     
-                    this.onTermSubmit(this.state.term,region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(null, null,region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log("pour région " + region.slug.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
 
                     
@@ -254,7 +296,7 @@ class Input extends React.Component {
                     console.log(departement.code);
 
 
-                    this.onTermSubmit(this.state.term,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.name.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(null, null,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.name.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
 
 
                     fetch('/villes/' + departement.code)
@@ -302,7 +344,7 @@ class Input extends React.Component {
                     });
                     
             
-                    this.onTermSubmit(this.state.term,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), ville.codePostal, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(null, null,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), ville.codePostal, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log(this.state.ApiHref.length + this.state.villeSelect + this.state.nomDpt + this.state.nomRegion);
                     console.log(this.state.nomVille.substr(0,2));
                     
@@ -322,13 +364,15 @@ class Input extends React.Component {
 
 
 
-    onListeMed = async () => {
-        const reponse = await ApiHref
+    onListeMed = async (termSpec, termNom, termVille) => {
+        const reponseSaisie = await ApiHref
         
         .get('/search', {
             params: {
+                "q" : termNom,
                 "rows" : 10000, 
-                //"refine.code_profession" : specialiteSelectCode,
+                "refine.nom_com" : termVille,
+                "refine.code_profession" : termSpec,
                 // facet : "HAUTS-DE-SEINE",
                 // facet : "nom_dep",
         
@@ -349,26 +393,27 @@ class Input extends React.Component {
 
 
         this.setState({
-            medecinNom : reponse.data.records,
+            medecinNom : reponseSaisie.data.records,
         })
      
-      
-        console.log("reponse.data.records[0].fields :");
+        console.log("reponseSaisie :"); 
+        console.log("reponseSaisie.data.records[0].fields :" + reponseSaisie.data.records[0].fields);
 
 
 
     }
 
 
-    onTermSubmit = async (term,reg,dpt,cp,profession) => {
+    onTermSubmit = async (termNom, termVille,reg,dpt,cp,profession) => {
         const reponse = await ApiHref
         
         .get('/search', {
             params: {
-                "q" : term,
+                "q" : termNom,
                 "refine.code_profession" : profession,
                 "refine.nom_reg" : reg,
                 "refine.nom_dep" : dpt,
+                "refine.nom_com" : termVille,
                 "refine.code_postal" : cp,
                 "rows" : 9999, 
                 // facet : "HAUTS-DE-SEINE",
@@ -400,19 +445,13 @@ class Input extends React.Component {
             ApiHref : reponse.data.records,
         })
         
-        console.log("quantite de response:" + reponse.data.records.length + "erreur quantité :" + this.state.hasError);
+
         console.log("response :"); 
         console.log(reponse); 
         
         console.log("response data records :");
         console.log(reponse.data.records);
-        
-        console.log("erreur :");
-        
-        
-        console.log(reponse.data.records.length == 0 ? "vrai" : "faux");       
-      
-        console.log("reponse.data.records[0].fields :");
+
 
 
         
@@ -434,95 +473,136 @@ class Input extends React.Component {
                 <Header/>
 
                 <div className="shadow-lg p-3 bg-white rounded mt-3 mx-auto styleForm">
-                    <div className="row w-75 mx-auto">
+
+                            <div className="uni-shortcode-tab-1 mx-auto">
+                                <div className="tabbable-panel">
+                                    <div className="tabbable-line mx-auto text-center">
+                                        <ul className="nav nav-tabs titleSearch">
+                                            <li className="active text-center mx-auto">
+                                                <a className="text-center mx-auto" href="#tab_1" data-toggle="tab" style={{pointer:"cursor"}} aria-expanded="false" onClick={()=>this.initialize()}>
+                                                    RECHERCHER PAR TERRITOIRE </a>
+                                            </li>
+                                            <li className="text-center mx-auto">
+                                                <a className="text-center mx-auto" href="#tab_2" data-toggle="tab" aria-expanded="true" onClick={()=>this.initialize()}>
+                                                    RECHERCHER PAR SAISIE </a>
+                                            </li>
+                                        </ul>
+                                        <div className="tab-content">
+
+                                            <div className="tab-pane active" id="tab_1">
+                                                <div className="row w-75 mx-auto">
                         
-                            <div className="mx-auto form-group cadre text-center text-light h4 col-sm-5">
-                                <div>Choisissez une spécialité</div>
-                                <div>-</div>
-                                <select autoComplete="on" onChange={this.onChangeSpec.bind(this)} id="inputSpecialite" name="specialite" className="mb-4 form-control inputstyle text-center">
-                                    <option className="text-center form-group h4 text-info"> Choisissez une spécialité</option>
-                                    {this.state.Specialites.map(specialite => (<option className="text-center" key={specialite.id} value={specialite.codeProfession}>{specialite.libelleProfession}</option>))}
-                                </select>
-                            </div> 
-                            <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-5">
-                                <div>Rechercher par nom de médecin</div>
-                                <div>-</div>
-                                <SearchBar onFormSubmit={this.onTermSubmit} specialTermProps={this.specialTerm} apihref={this.state.medecinNom}/> 
-                            </div> 
-                        
-                            <div className="row col-sm-12 mx-auto">
+                                                    <div className="mx-auto form-group cadre text-center text-light h4 col-sm-5">
+                                                        <div>Choisissez une spécialité</div>
+                                                        <div>-</div>
+                                                        <select autoComplete="on" onChange={this.onChangeSpec.bind(this)} id="inputSpecialite" name="specialite" className="mb-4 form-control inputstyle text-center">
+                                                            <option className="text-center form-group h4 text-info"> Choisissez une spécialité</option>
+                                                            {this.state.Specialites.map(specialite => (<option className="text-center" key={specialite.id} value={specialite.codeProfession}>{specialite.libelleProfession}</option>))}
+                                                        </select>
+                                                    </div> 
 
-                                <div className="mx-auto form-group cadre text-center text-warning h4 col-sm-4">
-                                <div>Choisissez une région</div>
-                                <div>-</div>
-                                <select onChange={this.onChangeRegion.bind(this)} id="inputRegion" name="region" className="form-control inputstyle text-center mt-4 mb-2">
-                                <option className="text-center form-group h4 text-danger"> Choisissez une région</option>
-                                        {this.state.Regions.map(region => (<option key={region.id} className="text-center" value={region.code}>{region.name}</option>))}
-                                    </select>
+                                                
+                                                    <div className="row col-sm-12 mx-auto">
+
+                                                        <div className="mx-auto form-group cadre text-center text-warning h4 col-sm-4">
+                                                        <div>Choisissez une région</div>
+                                                        <div>-</div>
+                                                        <select onChange={this.onChangeRegion.bind(this)} id="inputRegion" name="region" className="form-control inputstyle text-center mt-4 mb-2">
+                                                        <option className="text-center form-group h4 text-danger"> Choisissez une région</option>
+                                                                {this.state.Regions.map(region => (<option key={region.id} className="text-center" value={region.code}>{region.name}</option>))}
+                                                            </select>
+                                                        </div>
+                                    
+                                                        <div className="mx-auto form-group text-center h4 cadre text-danger col-sm-4">
+                                                            <div>{this.state.nomRegion != "" ? "Choisissez un département de la région " + this.state.nomRegion.toUpperCase() : (<div>Choisissez un département<div>-</div></div>) }</div>
+                                                                <select className="btnDpt text-center form-group h4 text-danger w-100" onChange={this.onChangeDpt.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control inputstyle mt-4 mb-2">
+                                    
+                                                                <option className="btnDpt text-center form-group h4 text-danger">Choisissez un département</option>
+                                                                
+                                                                {this.state.Dpts.map(departement => (<option className="text-center" key={departement.id} className="btnDpt" value={departement.code}>{departement.name}</option>))}
+                                                                </select>
+                                                        </div>
+                                                    
+                                                        <div id="inputvillegp" className="mx-auto form-group text-center cadre h4 text-danger col-sm-4" style={{display:"block"}}>
+                                                            <div className="text-dark">{this.state.nomDpt != "" ? "Choisissez une VILLE du département " + this.state.nomDpt : (<div>Choisissez une ville<div>-</div></div>) }</div>
+
+                                                            <select style={{display:this.state.visibility}} autoComplete="on" onChange={this.onChangeVille.bind(this)} id="inputVille" name="ville" className="btnVille form-control inputstyle text-center mt-4 mb-2">
+                                                            <option className="btnVille text-center form-group h4 text-success">Choisissez une ville</option>
+                                                                    {this.state.Villes.map(ville => (<option key={ville.id} className="btnVille text-center" value={ville.codePostal}>{ville.ville} {ville.codePostal}</option>))}
+                                                            </select>
+                                                        </div> 
+
+                                                    </div>
+
+
+
+
+                                                    <div className=" row text-center h1 mt-5 mx-auto bord"> 
+
+                                                        
+                                                            {this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length > 90 ? 
+                                                            <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                                Merci d'affiner votre recherche en précisant une région ou un département
+                                                            </div> : ""}
+
+                                                            {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length > 90 ? 
+                                                            <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                                Merci d'affiner votre recherche en précisant un département
+                                                            </div> : ""}
+
+                                                            {this.state.nomDpt != "" && this.state.ApiHref.length >= 90 ? 
+                                                            <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                                Merci d'affiner votre recherche en précisant la ville
+                                                            </div> : ""}
+                                                        
+                                                        <div className="col-sm-12">
+                                                            {this.state.ApiHref.length > 1 && this.state.ApiHref.length != 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                            {this.state.ApiHref.length == 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div>{"Plus de " + this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                            {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                                            {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                                            {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
+
+                                                            {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                                            {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                                            {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
+                                                        </div>
+                                                    </div> 
+
+
+                                                </div>
+                                            </div>
+
+                                            <div className="tab-pane" id="tab_2">
+                                                    <SearchBar specialTermPropsSpec={this.specialTermSpec} onFormSubmit={this.onListeMed} specialTermPropsNom={this.specialTermNom} specialTermPropsVille={this.specialTermVille} apiVilles={this.state.Villes}/> 
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
-            
-                                <div className="mx-auto form-group text-center h4 cadre text-danger col-sm-4">
-                                    <div>{this.state.nomRegion != "" ? "Choisissez un département de la région " + this.state.nomRegion.toUpperCase() : (<div>Choisissez un département<div>-</div></div>) }</div>
-                                        <select className="btnDpt text-center form-group h4 text-danger w-100" onChange={this.onChangeDpt.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control inputstyle mt-4 mb-2">
-            
-                                        <option className="btnDpt text-center form-group h4 text-danger">Choisissez un département</option>
-                                        
-                                        {this.state.Dpts.map(departement => (<option className="text-center" key={departement.id} className="btnDpt" value={departement.code}>{departement.name}</option>))}
-                                        </select>
-                                </div>
-                            
-                                <div id="inputvillegp" className="mx-auto form-group text-center cadre h4 text-danger col-sm-4" style={{display:"block"}}>
-                                    <div className="text-dark">{this.state.nomDpt != "" ? "Choisissez une VILLE du département " + this.state.nomDpt : (<div>Choisissez une ville<div>-</div></div>) }</div>
-
-                                    <select style={{display:this.state.visibility}} autoComplete="on" onChange={this.onChangeVille.bind(this)} id="inputVille" name="ville" className="btnVille form-control inputstyle text-center mt-4 mb-2">
-                                    <option className="btnVille text-center form-group h4 text-success">Choisissez une ville</option>
-                                            {this.state.Villes.map(ville => (<option key={ville.id} className="btnVille text-center" value={ville.codePostal}>{ville.ville} {ville.codePostal}</option>))}
-                                    </select>
-                                </div> 
-
                             </div>
 
-                            <div className="text-center h1 mt-5 mx-auto bord"> 
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion == "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille}</div></div>) : ""}
-
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.term == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
-
-                            </div> 
-
-                            {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length > 90 ? 
-                            <div className="form-group h4 text-danger col-sm-12 mx-auto text-center bord">
-                                Merci d'affiner votre recherche en précisant un département
-                            </div> : ""}
-
-                            {this.state.nomDpt != "" && this.state.ApiHref.length >= 90 ? 
-                            <div className="form-group h4 text-danger col-sm-12 mx-auto text-center bord">
-                                Merci d'affiner votre recherche en précisant la ville
-                            </div> : ""}
-
-
-                    </div>
                 </div>
 
                 <div className="uni-services mx-auto">
                     <div className="uni-our-services-2 uni-background-4">
                         <div className="container">
 
+                        {/* PAR SELECTION */}
                             {/* Affichage France */}
-                            {this.state.ApiHref.length < 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.term == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""} 
+                            {this.state.ApiHref.length <= 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""} 
                                 
                             {/* Affichage par Région */}
                             {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
-                            {this.state.term != null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+                            {this.state.ApiHref.length <= 90 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
 
                             {/* Affichage par Departement */}
-                            {this.state.nomDpt != "" && this.state.ApiHref.length <= 90 && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
-                            
+                            {this.state.ApiHref.length <= 90 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
 
+                        {/* PAR SAISIE  */}
+                            {this.state.medecinNom.length <= 90 ? this.state.medecinNom.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+
+
+                        
                         </div>
                     </div>
                 </div>

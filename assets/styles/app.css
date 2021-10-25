@@ -67,3 +67,31 @@ border-radius:20px;
     background-color:white;
     box-shadow:2px 2px 2px black;
 }
+
+.cartStyle{
+    height:300px;
+    overflow:auto;      
+
+}
+
+.titleSearch{
+
+    margin:auto!important;
+}
+.tabbable-panel{
+
+    margin:auto!important;
+}
+
+.avertissement{
+    animation-duration: .8s;
+    animation-name: clignoter;
+    animation-iteration-count: infinite;
+    transition: none;
+}
+
+@keyframes clignoter {
+    0%   { opacity:1; }
+    40%   {opacity:0; }
+    100% { opacity:1; }
+  }

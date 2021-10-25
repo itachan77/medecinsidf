@@ -4,6 +4,9 @@ import { countryOptions } from "./options";
 
 import "./autofill.css";
 
+
+
+
 const Input = (props) => {
   const { autoComplete, onAutoFill } = props.selectProps;
 
@@ -29,7 +32,32 @@ const Input = (props) => {
   );
 };
 
+
+
+
+
+
+
 const SearchBar = (props) => {
+
+const [Villes, setVilles] = useState([]);
+
+
+
+useEffect ( () => {
+const recupData = async () => {
+    const res = await fetch('/villes/' + "toutesVilles");
+
+    const data = await res.json();
+
+    setVilles(data);
+
+}
+recupData();
+}, [])
+
+
+
   const options = useRef(countryOptions).current;
 
   // Expose a hook for JavaScript when autofill is shown
@@ -61,6 +89,7 @@ const SearchBar = (props) => {
         autoComplete="given-name"
         components={{ Input }}
         inputId="frmNameA"
+        //options={Villes.map(ville => ({label:ville.ville, value:ville.codePostal}))}
         options={[
           {label: "Eric Bonow", value: "eb"},
           {label: "Chantal MANETTE", value: "mc"},

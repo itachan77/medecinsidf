@@ -1,57 +1,44 @@
 import React from 'react';
 
 
-const cart = () => (
+const Cart = ({item}) => (
     
-    <div id="wrapper-container" className="site-wrapper-container">
-
-
-                <div id="main-content" className="site-main-content">
-                    <section className="site-content-area">
-
-                        <div className="uni-services-body">
-
-                            <div className="uni-our-services-1">
-
-                                <div className="uni-shortcode-icons-box-5">
-                                    <div className="container">
-                                        <div className="row">
-                                            <div className="col-md-4">
-                                                <div className="uni-shortcode-icons-box-5-default">
-                                                    <div className="item-icons-title">
-                                                        <div className="col-md-4 uni-clear-padding">
-                                                            <div className="item-icons">
-                                                                <img src="images/icons_box/icon_4/icon-5.png" alt="" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-8 uni-clear-padding">
-                                                            <div className="item-title">
-                                                                <h4>Corneal transplant surgery</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item-caption">
-                                                        <p>
-                                                            Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                                            fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                                            ultricies eget...
-                                                        </p>
-                                                        <a href="#" className="readmore">Read more</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <div className="col-md-4 mt-5 cartStyle">
+            <div className="specialite">
+                <h3 className="text-center">{item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}</h3>
+            </div>
+            <div className="uni-shortcode-icons-box-5-default">
+                <div className="item-icons-title">
+                    <div className="col-md-4 uni-clear-padding">
+                        <div className="item-icons">
+                            <img src="images/icons_box/icon_4/icon-5.png" alt="" />
                         </div>
-                    </section>
+                    </div>
+                    <div className="col-md-8 uni-clear-padding">
+                        <div className="item-title text-center">
+                            <h4 className="text-center">{item.fields.nom}</h4>
+                        </div>
+                    </div>
                 </div>
+                <div className="item-caption">
+                        <address>
+                            <i class="fas fa-map-marker-alt"></i>
+                            {" " + item.fields.adresse}
+                        </address>
 
-    </div>
+                    {item.fields.telephone != null ? 
+                    (<div>
+                        <i className="fas fa-phone-square-alt"></i> 
+                        <a href={"tel:" + item.fields.telephone}> {item.fields.telephone}</a>
+                    </div>) 
+                    : ""}
+
+                </div>
+            </div>
+        </div>
 
 )
 
-export default cart;
+export default Cart;
 
 
