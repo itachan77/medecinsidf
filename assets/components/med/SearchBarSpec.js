@@ -42,14 +42,10 @@ class SearchBarSpec extends Component {
             codeProfession : '',
         },
     ],
-    termSpec:"",
+    
 
 }
 
-onChangeSpec = e => {
-  console.log(e.target.value)
-  this.setState({termSpec: e.target.value})
-}
 
 
 componentDidMount() {
@@ -124,8 +120,8 @@ componentDidMount() {
         components={{ Input }}
         inputId="frmNameA"
         options={this.state.Specialites.map(specialite => ({label:specialite.libelleProfession, value:specialite.codeProfession}))}
-
-        onChange={this.onChangeSpec}
+        onChange={this.props.onChangeSpec.bind(this)}
+        //onChange={()=>this.props.onChangeSpec(45)}
       />
 
 

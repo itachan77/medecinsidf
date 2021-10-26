@@ -6,8 +6,8 @@ class SearchBar extends Component {
 
     state = {
         termNom: "",
-        termVille:"",
-        termSpec:"",
+        termVille:null,
+        termSpec:null,
     }
 
     onChangeNom = e => {
@@ -15,47 +15,42 @@ class SearchBar extends Component {
 
     }
 
+    onChangeVille = e => {
+        var index = e.label;
+            if (e != undefined) {
+                console.log("ville :" + index)
+                this.setState({termVille: index})
+            }
+      }
 
-
-
-
+      
+    onChangeSpec = e => {
+        var index = e.value;
+            if (e != undefined) {
+                console.log("specialite :" + index)
+                this.setState({termSpec: index})
+            }
+    }
 
 
     onSubmit = e => {
 
-
         e.preventDefault();
-        //A compléter plus tard
+        
+        console.log("nomSaisi state:" + this.state.termNom);
+        console.log("villeSaisie state:" + this.state.termVille);
+        console.log("Specialite state:" + this.state.termSpec);
 
         //Pour le choix par VILLE on appelle specialTermPropsVille qui modifie le state termNom du composant Input
             //très important car recupère le  nom saisi
-            if (document.getElementsByClassName("css-qc6sy-singleValue")[0].textContent != undefined) {
-                var villeChoisie = document.getElementsByClassName("css-qc6sy-singleValue")[0].textContent;
-                this.setState({termVille: document.getElementsByClassName("css-qc6sy-singleValue")[0].textContent})
-
-
-            }
-            else {
-                var villeChoisie = null;
-            }
-
-            console.log("nomSaisi state:" + this.state.termNom);
-            console.log("villeSaisie state:" + this.state.termVille);
-            console.log("Specialite state:" + this.state.termSpec);
-            
-            
-
-
-            
-
             //on appelle la fonction specialTermPropsVille qui modifie le state termVille du composant Input
-            this.props.specialTermPropsVille(villeChoisie)
+            this.props.specialTermPropsVille(this.state.termVille)
 
         //Pour le choix par NOM on appelle specialTermPropsNom qui modifie le state termNom du composant Input
             this.props.specialTermPropsNom(this.state.termNom)
 
         //TOTAL 
-        this.props.onFormSubmit(this.state.termNom == "" ? null : this.state.termNom,villeChoisie); //vers axios search (fonction onListeMed)
+        this.props.onFormSubmit(this.state.termSpec, this.state.termNom == "" ? null : this.state.termNom,this.state.termVille); //vers axios search (fonction onListeMed)
     }
 
 
@@ -68,7 +63,7 @@ class SearchBar extends Component {
                         <div style={{zIndex:3}} className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
                             <div>Saisissez une ville</div>
                             <div>-</div>
-                            <SearchBarSpec specialTermPropsSpec={this.props.specialTermPropsSpec}/> 
+                            <SearchBarSpec onChangeSpec={this.onChangeSpec} specialTermPropsSpec={this.props.specialTermPropsSpec}/> 
                         </div> 
 
                         <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
@@ -92,7 +87,7 @@ class SearchBar extends Component {
                         <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
                             <div>Saisissez une ville</div>
                             <div>-</div>
-                            <SearchBarVille specialTermPropsVille={this.props.specialTermPropsVille}/> 
+                            <SearchBarVille onChangeVille={this.onChangeVille} specialTermPropsVille={this.props.specialTermPropsVille}/> 
                         </div> 
 
                         <div className="mx-auto form-group text-center text-dark h4 col-sm-12 col-md-7">

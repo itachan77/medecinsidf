@@ -43,15 +43,10 @@ class SearchBarVille extends Component {
             departmentCode : '',
         },
     ],
-    termVille:"",
 
 
 }
 
-onChangeVille = e => {
-  console.log("recup" + e.target.value)
-  this.setState({termVille: e.target.value})
-}
 
 
 componentDidMount() {
@@ -124,8 +119,9 @@ componentDidMount() {
         inputId="frmNameA"
         options={this.state.Villes.map(ville => ({label:ville.ville, value:ville.codePostal}))}
 
-
-        onChange={this.onChangeVille}
+        
+        onChange={this.props.onChangeVille.bind(this)}
+        //onChange={()=>this.props.onChangeVille("Drancy")}
         
       />
 

@@ -145,7 +145,7 @@ class Input extends React.Component {
             nomDpt:"",
             villeSelect:"aucune selection",
             specialiteSelectCode:"aucune selection",
-            //ApiHref : [],
+            ApiHref : [],
         });
 
 
@@ -176,7 +176,7 @@ class Input extends React.Component {
         this.setState({
             termVille: mysearchVille
         });
-        console.log("resultat de termVille :" + this.state.termVille)
+        console.log("resultat de termVille state :" + this.state.termVille + "resultat de termVille pur :" + mysearchVille)
     }
     
     onChangeSpec = (e) => {
@@ -397,7 +397,7 @@ class Input extends React.Component {
         })
      
         console.log("reponseSaisie :"); 
-        console.log("reponseSaisie.data.records[0].fields :" + reponseSaisie.data.records[0].fields);
+        console.log("reponseSaisie.data.records :" + reponseSaisie.data.records);
 
 
 
