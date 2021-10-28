@@ -1,18 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios'
+import axios from 'axios';
 import { Hint } from 'react-autocomplete-hint';
 
 
-function AutoVille() {
+function AutoVille({mons,onChangeVille}) {
   const [hintData, setHintData] = useState([])
   const [text, setText] = useState('')
+
 
   const getData = async () => {
     const res = await axios.get('/villes/' + "toutesVilles")
       var hintArray = []
-       res.data.map(a => hintArray.push(a.ville))
+       res.data.map(a => hintArray.push(a.ville.slice()))
         setHintData(hintArray)
   }
+  
+  const fonc = (e) => {
+    setText(e.target.value);
+    onChangeVille(e);
+    //this.props.onChangeVille.bind(this)
+    
+    // console.log(e.target.value);
+    //console.log(mons);
+    //onChangeVille(value);
+    
+  }
+
+
 
   useEffect(()=> {
     getData()
@@ -26,12 +40,15 @@ function AutoVille() {
       <br/>
       <br/> */}
      <Hint options={hintData} allowTabFill>
-    <input className='input-with-hint'
-        value={text}
-        onChange={e => setText(e.target.value)} 
+     
+        <input className=''
+          value={text}
+          onChange={(e)=>fonc(e)}
+
         />
 
       </Hint>
+      
     </div>
   );
 }

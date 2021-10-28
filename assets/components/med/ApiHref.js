@@ -29,5 +29,5 @@ export default axios.create({
         //API ameliorée
         //dataset: "medecins",
         
-   }
+    }
 })

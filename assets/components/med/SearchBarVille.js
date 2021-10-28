@@ -118,14 +118,10 @@ componentDidMount() {
         components={{ Input }}
         inputId="frmNameA"
         options={this.state.Villes.map(ville => ({label:ville.ville, value:ville.codePostal}))}
-
-        
         onChange={this.props.onChangeVille.bind(this)}
         //onChange={()=>this.props.onChangeVille("Drancy")}
         
       />
-
-
 
 
                 </div>

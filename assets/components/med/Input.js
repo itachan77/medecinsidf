@@ -68,7 +68,7 @@ class Input extends React.Component {
 
     }
 
-    
+
 
     componentDidMount() {
 
@@ -199,7 +199,7 @@ class Input extends React.Component {
                     
                     console.log("pour spécialite " + this.state.nomRegion == "" ? null : this.state.nomRegion, this.state.nomDpt == "" ? null:this.state.nomDpt, this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
 
-                    this.onTermSubmit(null, null, this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
+                    this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
 
                 }    
             })
@@ -231,7 +231,7 @@ class Input extends React.Component {
                         villeSelect :"aucune selection",
                     });
                     
-                    this.onTermSubmit(null, null,region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log("pour région " + region.slug.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
 
                     
@@ -296,7 +296,7 @@ class Input extends React.Component {
                     console.log(departement.code);
 
 
-                    this.onTermSubmit(null, null,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.name.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.name.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
 
 
                     fetch('/villes/' + departement.code)
@@ -336,7 +336,7 @@ class Input extends React.Component {
             
             dataObjetVille.map(ville => {
             
-                if (ville.codePostal == index) {
+                if (ville.ville + " " +ville.codePostal == index) { //la valeur récupérée est la ville et le code postal au format "Drancy 93700"
                     this.setState({
                         villeSelect: ville.codePostal,
                         nomVille:ville.ville,
@@ -344,7 +344,7 @@ class Input extends React.Component {
                     });
                     
             
-                    this.onTermSubmit(null, null,this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), ville.codePostal, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDpt == "" ? null:this.state.nomDpt.toUpperCase(), index, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log(this.state.ApiHref.length + this.state.villeSelect + this.state.nomDpt + this.state.nomRegion);
                     console.log(this.state.nomVille.substr(0,2));
                     
@@ -365,13 +365,15 @@ class Input extends React.Component {
 
 
     onListeMed = async (termSpec, termNom, termVille) => {
+    
+        console.log("dans Input.js fonction onlisteMed : " + termSpec +" - "+ termNom +" - "+ termVille);
         const reponseSaisie = await ApiHref
         
         .get('/search', {
             params: {
-                "q" : termNom,
+                "q" : termNom | termVille,
                 "rows" : 10000, 
-                "refine.nom_com" : termVille,
+                //"refine.nom_com" : termVille,
                 "refine.code_profession" : termSpec,
                 // facet : "HAUTS-DE-SEINE",
                 // facet : "nom_dep",
@@ -404,17 +406,15 @@ class Input extends React.Component {
     }
 
 
-    onTermSubmit = async (termNom, termVille,reg,dpt,cp,profession) => {
+    onTermSubmit = async (reg,dpt,cp,profession) => {
         const reponse = await ApiHref
         
         .get('/search', {
             params: {
-                "q" : termNom,
+                "q" : cp,
                 "refine.code_profession" : profession,
                 "refine.nom_reg" : reg,
                 "refine.nom_dep" : dpt,
-                "refine.nom_com" : termVille,
-                "refine.code_postal" : cp,
                 "rows" : 9999, 
                 // facet : "HAUTS-DE-SEINE",
                 // facet : "nom_dep",
@@ -452,7 +452,8 @@ class Input extends React.Component {
         console.log("response data records :");
         console.log(reponse.data.records);
 
-
+        console.log("AFFICHAGE HAUT");
+        console.log(" this.state.ApiHref.length : " + this.state.ApiHref.length + "this.state.villeSelect : " + this.state.villeSelect + "this.state.nomDpt : " + this.state.nomDpt + "this.state.termNom : " + this.state.termNom + "this.state.nomRegion : " + this.state.nomRegion); 
 
         
         //console.log(reponse); pour voir les infos récupérées par l'api youtube
@@ -515,20 +516,18 @@ class Input extends React.Component {
                                     
                                                         <div className="mx-auto form-group text-center h4 cadre text-danger col-sm-4">
                                                             <div>{this.state.nomRegion != "" ? "Choisissez un département de la région " + this.state.nomRegion.toUpperCase() : (<div>Choisissez un département<div>-</div></div>) }</div>
-                                                                <select className="btnDpt text-center form-group h4 text-danger w-100" onChange={this.onChangeDpt.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control inputstyle mt-4 mb-2">
-                                    
+                                                            
+                                                            <select className="btnDpt text-center form-group h4 text-danger w-100" onChange={this.onChangeDpt.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control inputstyle mt-4 mb-2">
                                                                 <option className="btnDpt text-center form-group h4 text-danger">Choisissez un département</option>
-                                                                
                                                                 {this.state.Dpts.map(departement => (<option className="text-center" key={departement.id} className="btnDpt" value={departement.code}>{departement.name}</option>))}
-                                                                </select>
+                                                            </select>
                                                         </div>
                                                     
                                                         <div id="inputvillegp" className="mx-auto form-group text-center cadre h4 text-danger col-sm-4" style={{display:"block"}}>
                                                             <div className="text-dark">{this.state.nomDpt != "" ? "Choisissez une VILLE du département " + this.state.nomDpt : (<div>Choisissez une ville<div>-</div></div>) }</div>
-
                                                             <select style={{display:this.state.visibility}} autoComplete="on" onChange={this.onChangeVille.bind(this)} id="inputVille" name="ville" className="btnVille form-control inputstyle text-center mt-4 mb-2">
                                                             <option className="btnVille text-center form-group h4 text-success">Choisissez une ville</option>
-                                                                    {this.state.Villes.map(ville => (<option key={ville.id} className="btnVille text-center" value={ville.codePostal}>{ville.ville} {ville.codePostal}</option>))}
+                                                                    {this.state.Villes.map(ville => (<option key={ville.id} className="btnVille text-center" value={ville.ville + " " + ville.codePostal}>{ville.ville} {ville.codePostal}</option>))}
                                                             </select>
                                                         </div> 
 

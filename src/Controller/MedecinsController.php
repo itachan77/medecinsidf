@@ -147,6 +147,39 @@ class MedecinsController extends AbstractController
         return $response->setData($ville); //(le paramètre comme $discipline correspond toujours à un tableau)
   
     }  
+    /**
+     * @Route("/villesword", name="villeWord")
+     */
+    public function villeWord(CpvilleRepository $cpvillesRepository, $codeDpt): Response
+    {
+
+            /***********DATA REGION */
+
+        if($codeDpt != "toutesVilles")
+        {
+
+            $cpvilles=$cpvillesRepository->findBy(["departmentCode" => $codeDpt]);
+            $ville=[];
+            if ($cpvilles)
+            {
+                foreach($cpvilles as $val) {
+                    $ville[]=[
+                        'id'=>$val->getId(),
+                        'ville'=>$val->getVille(),
+                        'codePostal'=>$val->getCodePostal(),
+                        'departmentCode'=>$val->getDepartmentCode(),];
+                }
+            }
+        }
+
+//        $dataville = json_encode($ville);
+        
+        //JsonResponse retourne une valeur en Json. ex: {"id":11,"nomDiscipline":"Anglais","isDone":false}
+        $response = new JsonResponse();
+
+        return $response->setData($ville); //(le paramètre comme $discipline correspond toujours à un tableau)
+  
+    }  
 
 
         /**

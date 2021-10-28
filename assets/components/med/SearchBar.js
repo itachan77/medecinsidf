@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import SearchBarVille from './SearchBarVille.js';
+// import SearchBarVille from './SearchBarVille.js';
 import SearchBarSpec from './SearchBarSpec.js';
+import AutoVille from './AutoComplete/2/AutoVille.js';
+// import AutoNom from './AutoComplete/2/AutoNom.js';
 
 class SearchBar extends Component {
 
@@ -10,13 +12,22 @@ class SearchBar extends Component {
         termSpec:null,
     }
 
+    strUcFirst = (a) => {
+        //  force la première lettre en majuscule et les autres lettres en minuscule
+        return (a+'').charAt(0).toUpperCase()+a.substr(1).toLowerCase();}
+
+
+
     onChangeNom = e => {
         this.setState({termNom: e.target.value})
 
     }
 
     onChangeVille = e => {
-        var index = e.label;
+        //var index = e.label; 
+        var indexMef = e.target.value; 
+        var index = this.strUcFirst(indexMef);
+        console.log("mise en forme : " + index )
             if (e != undefined) {
                 console.log("ville :" + index)
                 this.setState({termVille: index})
@@ -48,9 +59,9 @@ class SearchBar extends Component {
 
         //Pour le choix par NOM on appelle specialTermPropsNom qui modifie le state termNom du composant Input
             this.props.specialTermPropsNom(this.state.termNom)
-
+    
         //TOTAL 
-        this.props.onFormSubmit(this.state.termSpec, this.state.termNom == "" ? null : this.state.termNom,this.state.termVille); //vers axios search (fonction onListeMed)
+        this.props.onFormSubmit(this.state.termSpec, this.state.termNom == "" ? null : this.state.termNom,this.state.termVille == "" ? null : this.state.termVille); //vers axios search (fonction onListeMed)
     }
 
 
@@ -60,17 +71,17 @@ class SearchBar extends Component {
 
                     <form className="mx-auto text-center row w-75" onSubmit={this.onSubmit}>
 
-                        <div style={{zIndex:3}} className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
-                            <div>Saisissez une ville</div>
+                        <div style={{zIndex:3}} className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-5">
+                            <div>Saisissez une spécialité</div>
                             <div>-</div>
                             <SearchBarSpec onChangeSpec={this.onChangeSpec} specialTermPropsSpec={this.props.specialTermPropsSpec}/> 
                         </div> 
 
-                        <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
+
+                        <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-5">
                             <div>Saisissez un nom de médecin</div>
                             <div>-</div>
 
-                            
                                 <div className="input-group mb-3 row mx-auto text-center">
                                     <input type="text" 
                                         className="form-control col-sm-12 inputstyle" 
@@ -79,20 +90,21 @@ class SearchBar extends Component {
                                         value={this.state.termNom}
                                         onChange={this.onChangeNom}
                                     />
-                                    
                                 </div>
                             
                         </div>
 
-                        <div className="mx-auto form-group cadre text-center text-dark h4 col-sm-12 col-md-7">
+                        <div className="mx-auto form-group cadre text-center text-dark h4 pl-3 pr-3 pb-3">
                             <div>Saisissez une ville</div>
                             <div>-</div>
-                            <SearchBarVille onChangeVille={this.onChangeVille} specialTermPropsVille={this.props.specialTermPropsVille}/> 
+                            {/* <SearchBarVille onChangeVille={this.onChangeVille} specialTermPropsVille={this.props.specialTermPropsVille}/>  */}
+                            <div className="text-center mx-auto">
+                                <AutoVille onChangeVille={this.onChangeVille} mons="props OK"/>
+                            </div>
                         </div> 
 
-                        <div className="mx-auto form-group text-center text-dark h4 col-sm-12 col-md-7">
+                        <div className="mx-auto form-group text-center text-dark h4 col-sm-12 col-md-12">
                             <button type="submit" className="inputstyle text-dark">RECHERCHER</button>
-
                         </div> 
 
 

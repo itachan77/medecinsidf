@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select, { components } from "react-select";
-import { countryOptions } from "./options";
-
+import { countryOptions } from "../../options";
+import cities from "./Cities"
 import "./autofill.css";
 
 
@@ -89,13 +89,16 @@ recupData();
         autoComplete="given-name"
         components={{ Input }}
         inputId="frmNameA"
+        options={Villes.map(ville => ({label:ville.ville, value:ville.codePostal}))}
         //options={Villes.map(ville => ({label:ville.ville, value:ville.codePostal}))}
-        options={[
-          {label: "Eric Bonow", value: "eb"},
-          {label: "Chantal MANETTE", value: "mc"},
-          {label: "Chantal MANETTE", value: "mc"},
+        // options={[
+        //   {label: "Eric Bonow", value: "eb"},
+        //   {label: "Chantal MANETTE", value: "mc"},
+        //   {label: "Chantal MANETTE", value: "mc"},
         
-        ]}
+        // ]}
+
+
       />
 
       <label htmlFor="frmEmailA">Email</label>
