@@ -1,5 +1,7 @@
 doctrine:
     dbal:
+        #url: 'mysql://dbu2123111:3yqd4xV7777Vx4dqy3951@db5005575046.hosting-data.io:3306/dbs4688352'
+
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,

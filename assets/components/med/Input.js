@@ -1,11 +1,12 @@
 import React from 'react';
-import OptionRegion from './OptionRegion.js';
 import ApiHref from './ApiHref.js';
 import ServiceItem from './ServiceItem1.js';
 import Header from './Header.js';
+import Footer from './Footer.js';
+
 import SearchBar from './SearchBar.js';
-import Cart from './Cart.js';
-import { isEmptyObject } from 'jquery';
+
+// import { isEmptyObject } from 'jquery';
 // import ExempleSelect from './ExempleSelect.js';
 // import InputRegion from './InputRegion.js';
 // import axios from 'axios';
@@ -606,6 +607,7 @@ class Input extends React.Component {
                     </div>
                 </div>
 
+                <Footer/>
             </div>    
         );
     }
