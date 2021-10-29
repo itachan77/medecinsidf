@@ -111,6 +111,9 @@ class Input extends React.Component {
                 
         })
         })
+        
+        
+        
 
         fetch('/regions')
         .then(res => res.json())
@@ -143,6 +146,12 @@ class Input extends React.Component {
                 nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
             })
         })
+
+
+
+
+
+
 
     }
 
