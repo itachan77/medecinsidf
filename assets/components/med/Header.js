@@ -10,7 +10,7 @@ class Header extends React.Component {
                 <div className="text-center">
                         <div className="mx-auto">
                             <h1 className="text-center styleHeader">MEDECINS LIBERAUX DE FRANCE</h1>
-                            <div className="row text-white h1"><hr/><i className="fas fa-hand-holding-medical"></i><hr/></div>
+                            <div className="row text-white h1"><hr/><i class="fas fa-stethoscope"></i><hr/></div>
                         </div>
                 </div>
             </header>

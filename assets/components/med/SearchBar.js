@@ -14,7 +14,9 @@ class SearchBar extends Component {
 
     strUcFirst = (a) => {
         //  force la première lettre en majuscule et les autres lettres en minuscule
-        return (a+'').charAt(0).toUpperCase()+a.substr(1).toLowerCase();}
+        //return (a+'').charAt(0).toUpperCase()+a.substr(1).toLowerCase();}
+        //  force la première lettre en majuscule
+        return (a+'').charAt(0).toUpperCase()+a.substr(1);}
 
 
 
@@ -30,7 +32,7 @@ class SearchBar extends Component {
         console.log("mise en forme : " + index )
             if (e != undefined) {
                 console.log("ville :" + index)
-                this.setState({termVille: indexMef})
+                this.setState({termVille: index})
             }
       }
 

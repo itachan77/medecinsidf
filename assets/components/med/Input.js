@@ -74,6 +74,7 @@ class Input extends React.Component {
         termSpec:null,
         medecinNom:[],
         toggleSpec:false,
+        searchSaisie:false,
 
     }
 
@@ -409,7 +410,8 @@ class Input extends React.Component {
 
 
         this.setState({
-            medecinNom : reponseSaisie.data.records,
+            medecinNom : reponseSaisie.data.records.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1),
+            searchSaisie : false,
         })
      
         console.log("reponseSaisie :"); 
@@ -457,7 +459,7 @@ class Input extends React.Component {
 
 
         this.setState({
-            ApiHref : reponse.data.records,
+            ApiHref : reponse.data.records.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1),
             LenghtFetching : false,
         })
         
@@ -485,14 +487,45 @@ class Input extends React.Component {
         this.setState({
             toggleSpec:!this.state.toggleSpec,
         })
-        
-        
     }
+    
+    // Mise en majuscule de la première lettre
+
     
     
     render() {
 
 
+
+        // const brands = ['cca', 'ccb', 'ccc', 'bba', 'bbb', 'bbc', 'aaa', 'aab', 'aac'];
+        
+        // const groups = brands.reduce((groups, brand) => {
+        //     const letterKey = brand.name.charAt(0).toLowerCase();
+        //     (groups[letterKey] || (groups[letterKey] = [])).push(brand);
+        //     return groups;
+        //   }, {});
+        //   Mappez les entrées de [clé, marques] à votre liste non ordonnée
+          
+        //   Object.entries(groups).sort().map(([letterKey, brands]) => (
+        //     <div key={letterKey}>
+        //       <h4>{letterKey}</h4>
+        //       <ul>
+        //         { brands.map(brand => <li key={brand}>{brand}</li>) }
+        //       </ul>
+        //   </div> ));
+        
+        // Object.entries(groups).sort().map(([letterKey, brands]) => {
+        //     console.log('KEY', letterKey);
+        //     brands.map(brand => console.log('\tbrand', brand));
+        //   });
+          
+        //     KEY a
+        // brand aaa
+        // brand aab
+        // brand aac
+        //     KEY b
+        // brand bba
+        // brand bbb
 
         return (
 
@@ -523,7 +556,7 @@ class Input extends React.Component {
                                             <div className="tab-pane active" id="tab_1">
                                                 <div className="row w-75 mx-auto">
                         
-                                                    <div className="mx-auto form-group cadre text-center text-light h4 col-sm-5">
+                                                    <div className="mx-auto form-group cadre text-center text-light h4 col-sm-6">
                                                         <div>Choisissez une spécialité</div>
                                                         <div>-</div>
                                                         <select autoComplete="on" onChange={this.onChangeSpec.bind(this)} id="inputSpecialite" name="specialite" className="mb-4 form-control inputstyle text-center">
@@ -533,7 +566,7 @@ class Input extends React.Component {
                                                     </div> 
 
                                                 
-                                                    <div className="row col-sm-12 mx-auto">
+                                                    <div className="row col-sm-12 mx-auto container-fluid">
 
                                                         <div className="mx-auto form-group cadre text-center text-warning h4 col-sm-4">
                                                         <div>Choisissez une région</div>
@@ -563,7 +596,7 @@ class Input extends React.Component {
 
                                                     </div>
 
-                                                    <div className=" row text-center h1 mt-5 mx-auto bord"> 
+                                                    <div className="row text-center h1 mt-5 mx-auto bord"> 
 
                                                             {!this.state.SpecialiteFetching | !this.state.RegionFetching | !this.state.DepartementFetching | !this.state.VilleFetching && this.state.LenghtFetching ? (<div className="spinner-border text-center mx-auto text-primary" role="status"><span className="sr-only">Loading...</span></div>) : ""}
 
@@ -598,6 +631,9 @@ class Input extends React.Component {
                                                             {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
                                                             {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
                                                             {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
+                                                            
+                                                            
+
                                                         </div>
                                                     </div> 
 
@@ -606,7 +642,19 @@ class Input extends React.Component {
                                             </div>
 
                                             <div className="tab-pane" id="tab_2">
+
                                                     <SearchBar specialTermPropsSpec={this.specialTermSpec} onFormSubmit={this.onListeMed} specialTermPropsNom={this.specialTermNom} specialTermPropsVille={this.specialTermVille} apiVilles={this.state.Villes}/> 
+                                                    
+                                                    <div className="row text-center h1 mt-5 mx-auto bord"> 
+                                                        <div className="col-sm-12">
+                                                            {/* Affichage résultat par saisie */}
+                                                            {this.state.medecinNom.length == 0 && this.state.searchSaisie ? 
+                                                                (<div>{this.state.medecinNom.length} <div className="h4">Aucun résultat trouvé</div></div>) : 
+                                                                this.state.medecinNom.length == 1 ? (<div>{this.state.medecinNom.length} <div className="h4">résultat trouvé</div></div>) : 
+                                                                this.state.medecinNom.length > 1 ? (<div>{this.state.medecinNom.length}<div className="h4">résultats trouvés</div></div>):""
+                                                            }
+                                                        </div>
+                                                    </div>
                                             </div>
 
                                         </div>
@@ -618,15 +666,22 @@ class Input extends React.Component {
 
                 <div className="uni-services mx-auto">
                     <div className="uni-our-services-2 uni-background-4">
-                        <div className="container">
+                        <div className="container mb-5">
 
                         {/* PAR SELECTION */}
-                            {/* Affichage France */}
-                            {this.state.ApiHref.length <= 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""} 
-                                
+                            {/* Affichage France */}                                                                              
+                                                                                                                                                                                            {/* for menuItem in menuItemAll|sort((a, b) => a.orderNumber <=> b.orderNumber)
+                                                                                                                                                                                            this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map
+                                                                                                                                                                                            
+                                                                                                                                                                                            item.fields.nom.split(" ")[1]
+                                                                                                                                                                                            */}
+                                                                                                                                                                                            
+                             {/* {this.state.ApiHref.length <= 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
+                             {/* this.state.ApiHref.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1)                              */}
+                               
+                            {this.state.ApiHref.length <= 90 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
                             {/* Affichage par Région */}
                             {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                            {this.state.ApiHref.length <= 90 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
 
                             {/* Affichage par Departement */}
                             {this.state.ApiHref.length <= 90 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
