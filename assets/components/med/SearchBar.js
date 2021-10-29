@@ -30,7 +30,7 @@ class SearchBar extends Component {
         console.log("mise en forme : " + index )
             if (e != undefined) {
                 console.log("ville :" + index)
-                this.setState({termVille: index})
+                this.setState({termVille: indexMef})
             }
       }
 

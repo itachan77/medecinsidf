@@ -967,8 +967,8 @@ a:hover {
             color: #333; }
 
 #toTop {
-  position: absolute;
-  left: 50%;
+  position: fixed;
+  left: 95%;
   bottom: 60px;
   z-index: 9999;
   display: -webkit-box;
@@ -999,11 +999,12 @@ a:hover {
   transition: all 0.5s; }
   @media screen and (max-width: 991px) and (min-width: 768px) {
     #toTop {
-      bottom: 85px; } }
+      bottom: 80px; 
+      left: 93%;} }
   @media screen and (max-width: 767px) {
     #toTop {
-      bottom: 135px;
-      left: 45%; } }
+      bottom: 80px;
+      left: 93%; } }
   #toTop:hover {
     border-color: #3f97da; }
     #toTop:hover .btn {

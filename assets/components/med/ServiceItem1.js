@@ -55,8 +55,8 @@ return  (
                                 <li className="active"><a href={"#tab_a" + item.recordid} data-toggle="pill">Carte et Adresse</a></li>
                                 <li><a href={"#tab_b" + item.recordid} data-toggle="pill">Actes pratiqués</a></li>
                                 <li><a href={"#tab_c" + item.recordid} data-toggle="pill">Informations diverses</a></li>
-                                <li><a href={"#tab_d" + item.recordid} data-toggle="pill">Horaires d'ouverture</a></li>
-                                <li><a href={"#tab_e" + item.recordid} data-toggle="pill">Renseignements</a></li>
+                                {/* <li><a href={"#tab_d" + item.recordid} data-toggle="pill">Horaires d'ouverture</a></li>
+                                <li><a href={"#tab_e" + item.recordid} data-toggle="pill">Renseignements</a></li> */}
                             </ul>
                         </div>
                     </div>
@@ -65,20 +65,26 @@ return  (
                             <div className="tab-pane active" id={"tab_a" + item.recordid}>
                                 <div className="uni-our-service-2-content-default">
                                     <div className="row">
-                                        <div className="col-md-5 mapouter gmap_canvas mx-auto text-center">
-                                            <iframe className="mx-auto text-center" width="300" height="200" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe>
+                                        <div className="col-md-12 col-lg-5 mapouter gmap_canvas mx-auto text-center">
+                                            <iframe className="mx-auto text-center d-none d-lg-block" width="300" height="200" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe>
+                                            <iframe className="mx-auto text-center d-xs-block d-lg-none" width="200" height="100" id="gmap_canvas" src={"https://maps.google.com/maps?q=" + item.fields.adresse + "&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameBorder="1" scrolling="no" marginHeight="0" marginWidth="0"></iframe>
                                         </div>
-                                        <div className="col-md-7 pl-5">
+                                        <div className="col-md-12 col-lg-7 pl-5">
                                             <div className="item-caption row">
                                                 <div className="item-caption-title col-sm-12">
                                                     <h3>ADRESSE</h3>
                                                     <div className="uni-line"></div>
                                                     <div>{item.fields.adresse}</div>
+                                                    <div className="d-sm-block d-md-block d-lg-none">
+                                                        <i className="fas fa-phone-square-alt"></i> 
+                                                        <a href={item.fields.telephone != null ? "tel:" + item.fields.telephone : ""}> {item.fields.telephone}</a>
+                                                        <div><button className="btn btn-primary mx-auto mt-1"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
+                                                    </div>
                                                 </div>
                                                 
                                                 <div className="item-caption-title col-sm-12">
                                                     {item.fields.telephone != null ? 
-                                                        (<div>
+                                                        (<div className="d-xs-none d-sm-none d-md-none d-lg-block">
                                                             <div className="item-caption-title">
                                                                 <h3>TEL.</h3>
                                                                 <div className="uni-line"></div>
@@ -92,7 +98,7 @@ return  (
                                             </div>
                                         </div>
 
-                                        <div className="mx-auto mb-2 mt-4">
+                                        <div className="mx-auto mb-2 d-none d-lg-block">
                                                 <button className="btn btn-primary mx-auto"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button>
                                         </div>
                                                 
@@ -155,7 +161,7 @@ return  (
                                     </div>
                                 </div>
                             </div>
-                            <div className="tab-pane" id={"tab_d" + item.recordid}>
+                            {/* <div className="tab-pane" id={"tab_d" + item.recordid}>
                                 <div className="uni-our-service-2-content-default">
                                     <div className="row">
                                         <div className="col-md-12">
@@ -168,7 +174,7 @@ return  (
                                         </div>
                                         <div className="uni-services-opinging-hours-content">
                                             <table className="table">
-                                                <tbody>
+                                                <tbody> */}
                                                     
                                                 {/* {item.properties.c_rdv_lundi != "" ? (<tr><td>Lundi</td><td>{item.properties.c_rdv_lundi}</td></tr>) : ""}
                                                 {item.properties.c_rdv_lundi != "" ? (<tr><td>Mardi</td><td>{item.properties.c_rdv_mardi}</td></tr>) : ""}
@@ -178,15 +184,15 @@ return  (
                                                 {item.properties.c_rdv_lundi != "" ? (<tr><td>Samedi</td><td>{item.properties.c_rdv_samedi}</td></tr>) : ""}
                                                 {item.properties.c_rdv_lundi != "" ? (<tr><td>Dimanche</td><td>{item.properties.c_rdv_dimanche}</td></tr>) : ""} */}
 
-                                            </tbody></table>
+                                            {/* </tbody></table>
 
                                         </div>
                                     </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="tab-pane" id={"tab_e" + item.recordid}>
+                            </div> */}
+                            {/* <div className="tab-pane" id={"tab_e" + item.recordid}>
                                 <div className="uni-our-service-2-content-default">
                                     <div className="row">
                                         <div className="col-md-5">
@@ -228,7 +234,7 @@ return  (
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

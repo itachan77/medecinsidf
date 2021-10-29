@@ -3,7 +3,7 @@ import ApiHref from './ApiHref.js';
 import ServiceItem from './ServiceItem1.js';
 import Header from './Header.js';
 import Footer from './Footer.js';
-
+import Load from './Load.js';
 import SearchBar from './SearchBar.js';
 
 // import { isEmptyObject } from 'jquery';
@@ -49,8 +49,15 @@ class Input extends React.Component {
                 id:"",
                 libelleProfession:'',
                 codeProfession:'',
+                
             }
         ],
+        isFetching: true,
+        LenghtFetching : true,
+        SpecialiteFetching : true,
+        RegionFetching : true,
+        DepartementFetching : true,
+        VilleFetching : true,
         ApiHref:[],
         value:"", 
         nomRegion:"",
@@ -97,6 +104,7 @@ class Input extends React.Component {
                 libelleProfession:specialite.libelleProfession,
                 codeProfession:specialite.codeProfession,
                 })),
+                isFetching: false,
                 nextId: Math.max(...Specialites.map(specialite => specialite.id)) + 1
                 
         })
@@ -166,6 +174,7 @@ class Input extends React.Component {
         });
         console.log("resultat de termNom :" + this.state.termNom)
     }
+    
     specialTermSpec = (mysearchSpec) => {
         this.setState({
             termSpec: mysearchSpec
@@ -196,6 +205,7 @@ class Input extends React.Component {
                     this.setState({
                         specialiteSelectCode: specialite.codeProfession,
                         specialiteSelect: specialite.libelleProfession,
+                        SpecialiteFetching : false,
                     });
                     
                     console.log("pour spécialite " + this.state.nomRegion == "" ? null : this.state.nomRegion, this.state.nomDpt == "" ? null:this.state.nomDpt, this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
@@ -230,6 +240,7 @@ class Input extends React.Component {
                         nomRegion:region.slug, 
                         nomDpt:"",
                         villeSelect :"aucune selection",
+                        RegionFetching : false,
                     });
                     
                     this.onTermSubmit(region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
@@ -293,6 +304,7 @@ class Input extends React.Component {
                         departementSelect: departement.code, 
                         nomDpt:departement.name,
                         villeSelect :"aucune selection",
+                        DepartementFetching : false,
                     });
                     console.log(departement.code);
 
@@ -341,7 +353,7 @@ class Input extends React.Component {
                     this.setState({
                         villeSelect: ville.codePostal,
                         nomVille:ville.ville,
-                        
+                        VilleFetching : false,
                     });
                     
             
@@ -372,9 +384,9 @@ class Input extends React.Component {
         
         .get('/search', {
             params: {
-                "q" : termNom | termVille,
+                "q" : termNom,
                 "rows" : 10000, 
-                //"refine.nom_com" : termVille,
+                "refine.nom_com" : termVille,
                 "refine.code_profession" : termSpec,
                 // facet : "HAUTS-DE-SEINE",
                 // facet : "nom_dep",
@@ -400,7 +412,8 @@ class Input extends React.Component {
         })
      
         console.log("reponseSaisie :"); 
-        console.log("reponseSaisie.data.records :" + reponseSaisie.data.records);
+        console.log("reponseSaisie.data.records :");
+        console.log(reponseSaisie.data.records);
 
 
 
@@ -444,6 +457,7 @@ class Input extends React.Component {
 
         this.setState({
             ApiHref : reponse.data.records,
+            LenghtFetching : false,
         })
         
 
@@ -462,7 +476,9 @@ class Input extends React.Component {
 
 
     }
-
+   
+    
+    
     
     render() {
 
@@ -471,7 +487,10 @@ class Input extends React.Component {
         return (
 
             <div>
-
+            
+                {this.state.isFetching == true ? <Load/> : ""}
+                
+                
                 <Header/>
 
                 <div className="shadow-lg p-3 bg-white rounded mt-3 mx-auto styleForm">
@@ -534,12 +553,10 @@ class Input extends React.Component {
 
                                                     </div>
 
-
-
-
                                                     <div className=" row text-center h1 mt-5 mx-auto bord"> 
 
-                                                        
+                                                            {!this.state.SpecialiteFetching | !this.state.RegionFetching | !this.state.DepartementFetching | !this.state.VilleFetching && this.state.LenghtFetching ? (<div className="spinner-border text-center mx-auto text-primary" role="status"><span className="sr-only">Loading...</span></div>) : ""}
+
                                                             {this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length > 90 ? 
                                                             <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
                                                                 Merci d'affiner votre recherche en précisant une région ou un département
@@ -554,9 +571,15 @@ class Input extends React.Component {
                                                             <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
                                                                 Merci d'affiner votre recherche en précisant la ville
                                                             </div> : ""}
-                                                        
+                                                            {/* <div className="spinner-border text-primary" role="status"><span className="sr-only">Loading...</span></div> */}
+                                                            {/* {this.state.ApiHref.length} */}
+                                                            
                                                         <div className="col-sm-12">
-                                                            {this.state.ApiHref.length > 1 && this.state.ApiHref.length != 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                            {this.state.ApiHref.length > 1 && this.state.ApiHref.length != 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? 
+                                                            (<div> {this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                            
+                                                            
+                                                            
                                                             {this.state.ApiHref.length == 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div>{"Plus de " + this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
                                                             {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
                                                             {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
@@ -604,10 +627,17 @@ class Input extends React.Component {
 
                         
                         </div>
+
+                            <div id="toTop" style={{display:"flex"}}><div className="btn btn-totop"><a href="#top"><i className="fa fa-angle-double-up" aria-hidden="true"></i></a></div></div>
+
+                        
+
                     </div>
+                    
+                    
+                <Footer/>
                 </div>
 
-                <Footer/>
             </div>    
         );
     }
