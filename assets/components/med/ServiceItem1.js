@@ -2,7 +2,7 @@ import React from 'react';
 
 
 
-const ServiceItem = ({item, error}) => {
+const ServiceItem = ({item, toggle, onSpecialiteClick}) => {
     // {item.fields.nom_dep}
     // <div>
     // {item.fields.record_timestamp == null ? "est indéfini" : item.fields.record_timestamp}
@@ -36,18 +36,30 @@ const ServiceItem = ({item, error}) => {
     if (item.fields != undefined) {
      
 return  (
-
-        <div>
-            <div className="mb-2 specialite mt-5">
-                <div className="card-text h2 p-1 text-center">
-                    <div className="text-danger h5 text-center mt-1">Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
-                    {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
+    
+    
+        <div className={toggle ? 'col-sm-12' : 'col-sm-3'}>
+            <div id={item.recordid} className="mb-2 specialite mt-5" onClick={onSpecialiteClick} style={{cursor:"pointer"}} data-target={"#" +item.recordid}>
+                <div className={toggle ? 'card-text h2 p-1 text-center' : 'card-text h4 p-1 text-center'}>
+                    <div className={toggle ? 'd-block' : 'd-none'}>Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
+                    
+                    {/* Affichage en petit */}
+                    <div className={toggle ? 'd-none' : 'd-block'}>
+                        <div className={toggle ? '' : 'font-weight-bold'}>{item.fields.nom}</div> 
+                        <div className={toggle ? '' : 'h6'}>{item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}</div> 
+                        <div className={toggle ? '' : 'h6'}>{item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}</div>
+                    </div>
+                    
+                    {/* Affichage en grand */}
+                    <div className={toggle ? 'd-block' : 'd-none'}><span className="font-weight-bold">{item.fields.nom}</span> - <span className='h6'>{item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}</span> - <span className='h6'>{item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}</span></div>
+                    
+                    <div className={toggle ? 'd-none' : 'd-block h6'}>{item.fields.adresse}</div>                    
                     
                 </div>
-                <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
+                <div className={toggle ? 'd-block ml-2 pb-3 text-center' : 'd-none'}> Convention : {item.fields.convention}</div>
             </div>
 
-            <div className="uni-our-service-2-body">
+            <div className="uni-our-service-2-body" style={{display: toggle ? 'block' : 'none' }}>
                 <div className="row">
                     <div className="col-md-3">
                         <div className="tab-nav">
@@ -240,6 +252,7 @@ return  (
                 </div>
             </div>
         </div>
+    
 
             )
     

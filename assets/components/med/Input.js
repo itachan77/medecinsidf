@@ -73,6 +73,7 @@ class Input extends React.Component {
         termNom:null,
         termSpec:null,
         medecinNom:[],
+        toggleSpec:false,
 
     }
 
@@ -477,7 +478,16 @@ class Input extends React.Component {
 
     }
    
-    
+    onSpecialiteClick = () => {
+        
+        console.log("onSpecialiteClick effectué");
+        
+        this.setState({
+            toggleSpec:!this.state.toggleSpec,
+        })
+        
+        
+    }
     
     
     render() {
@@ -612,17 +622,17 @@ class Input extends React.Component {
 
                         {/* PAR SELECTION */}
                             {/* Affichage France */}
-                            {this.state.ApiHref.length <= 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""} 
+                            {this.state.ApiHref.length <= 90 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""} 
                                 
                             {/* Affichage par Région */}
-                            {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
-                            {this.state.ApiHref.length <= 90 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+                            {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 90 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                            {this.state.ApiHref.length <= 90 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
 
                             {/* Affichage par Departement */}
-                            {this.state.ApiHref.length <= 90 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+                            {this.state.ApiHref.length <= 90 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
 
                         {/* PAR SAISIE  */}
-                            {this.state.medecinNom.length <= 90 ? this.state.medecinNom.map(item => (<ServiceItem key={item.recordid} item={item}/>)) : ""}
+                            {this.state.medecinNom.length <= 90 ? this.state.medecinNom.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
 
 
                         

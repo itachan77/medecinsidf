@@ -4,6 +4,10 @@ body {
 
 .specialite {
     box-shadow:5px 5px 5px black;border-radius:15px;background-color:beige;
+    height:150px;
+}
+.specialite:hover {
+    box-shadow:2px 2px 2px black;border-radius:9px;background-color:beige;
 }
 
 .minimenu {
