@@ -1,8 +1,9 @@
 import React from 'react';
 import ApiHref from './ApiHref.js';
-import ServiceItem from './ServiceItem1.js';
+import Miniature from './Miniature.js';
 import SearchBar from './SearchBar.js';
 import Load from './Load.js';
+
 
 
 class Corps extends React.Component {
@@ -68,6 +69,11 @@ class Corps extends React.Component {
         montreRegion:"none",
         montreDpt:"none",
         montreVille:"none",
+        captureFiche:[],
+        idEnreg:null,
+        clignoteVille:true,
+        clignoteDpt:true,
+        clignoteRegion:true,
 
     }
 
@@ -75,19 +81,19 @@ class Corps extends React.Component {
 
     componentDidMount() {
 
-        fetch('/villes/' + "toutesVilles")
-        .then(res => res.json())
-        .then(Villes => {
-            this.setState({
-                Villes: Villes.map(ville => ({
-                id: ville.id,
-                ville:ville.ville,
-                codePostal:ville.codePostal,
-                departmentCode:ville.departmentCode,
-                })),
-                nextId: Math.max(...Villes.map(ville => ville.id)) + 1 
-        })
-        })
+        // fetch('/villes/' + "toutesVilles")
+        // .then(res => res.json())
+        // .then(Villes => {
+        //     this.setState({
+        //         Villes: Villes.map(ville => ({
+        //         id: ville.id,
+        //         ville:ville.ville,
+        //         codePostal:ville.codePostal,
+        //         departmentCode:ville.departmentCode,
+        //         })),
+        //         nextId: Math.max(...Villes.map(ville => ville.id)) + 1 
+        // })
+        // })
 
 
         fetch('/specialite')
@@ -124,20 +130,20 @@ class Corps extends React.Component {
 
 
 
-        fetch('/departements/' + this.state.regionSelect)
-        .then(res => res.json())
-        .then(Dpts => {
-            this.setState({
-                Dpts: Dpts.map(departement => ({
-                id: departement.id,
-                code:departement.code,
-                slug:departement.slug,
-                name:departement.name,
-                regionCode:departement.regionCode,
-                })),
-                nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
-            })
-        })
+        // fetch('/departements/' + this.state.regionSelect)
+        // .then(res => res.json())
+        // .then(Dpts => {
+        //     this.setState({
+        //         Dpts: Dpts.map(departement => ({
+        //         id: departement.id,
+        //         code:departement.code,
+        //         slug:departement.slug,
+        //         name:departement.name,
+        //         regionCode:departement.regionCode,
+        //         })),
+        //         nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
+        //     })
+        // })
 
 
 
@@ -191,11 +197,14 @@ class Corps extends React.Component {
     
     onChangeSpec = (e) => {
     
+        
         var select = e.target;
         var index = select.options[select.selectedIndex].getAttribute("value");
         console.log(index);
         
         if (e != undefined) {
+        
+
     
             var dataObjetSpecialite = this.state.Specialites;
             
@@ -203,6 +212,7 @@ class Corps extends React.Component {
             
                 if (specialite.codeProfession == index) {
                     this.setState({
+                        captureFiche:[],
                         specialiteSelectCode: specialite.codeProfession,
                         specialiteSelect: specialite.libelleProfession,
                         SpecialiteFetching : false,
@@ -211,7 +221,8 @@ class Corps extends React.Component {
                     console.log("pour spécialite " + this.state.nomRegion == "" ? null : this.state.nomRegion, this.state.nomDptSlug == "" ? null:this.state.nomDptSlug, this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
 
                     this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, specialite.codeProfession);
-
+                
+                
                 }    
             })
         }
@@ -222,12 +233,22 @@ class Corps extends React.Component {
             });
         }
         
-        this.montre("block", "none", "none");
+        if(this.state.montreDpt == "none")  {
+            this.montre("block", "none", "none");
+            this.setState({
+                villeSelect: "aucune selection",
+                nomDpt:departement.name,
+                nomDptSlug:departement.slug,
+                
+            });
+            
+        }
         
     }
 
     onChangeRegion = (e) => {
     
+        
         var select = e.target;
         var index = select.options[select.selectedIndex].getAttribute("value");
         
@@ -239,6 +260,7 @@ class Corps extends React.Component {
             
                 if (region.code == index) {
                     this.setState({
+                        captureFiche:[],
                         regionSelect: region.code,
                         nomRegion:region.slug, 
                         nomDpt:"",
@@ -248,7 +270,15 @@ class Corps extends React.Component {
                     
                     this.onTermSubmit(region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log("pour région " + region.slug.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    console.log("dans region");
+                    
+                    console.log("this.state.captureFiche");
+                    console.log(this.state.captureFiche);
+                    console.log("this.state.ApiHref");
+                    console.log(this.state.ApiHref);
 
+    
+                                        
                     fetch('/departements/' + region.code)
                     .then(res => res.json())
                     .then(Dpts => {
@@ -263,9 +293,10 @@ class Corps extends React.Component {
                             nextId: Math.max(...Dpts.map(departement => departement.id)) + 1,     
                     })
                     })
-                    
-                    
                 }    
+                
+                
+                
             })
 
         }
@@ -281,7 +312,8 @@ class Corps extends React.Component {
 
 
     onChangeDpt = (e) => {
-    
+
+        
         var select = e.target;
         var index = select.options[select.selectedIndex].getAttribute("value");
         
@@ -293,6 +325,7 @@ class Corps extends React.Component {
             
                 if (departement.code == index) {
                     this.setState({
+                        captureFiche:[],
                         departementSelect: departement.code, 
                         nomDpt:departement.name,
                         nomDptSlug:departement.slug,
@@ -305,7 +338,6 @@ class Corps extends React.Component {
 
 
                     this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.slug.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
-
 
                     fetch('/villes/' + departement.code)
                     .then(res => res.json())
@@ -338,7 +370,7 @@ class Corps extends React.Component {
 
 
     onChangeVille = (e) => {
-    
+        
         var select = e.target;
         var index = select.options[select.selectedIndex].getAttribute("value");
         
@@ -350,13 +382,14 @@ class Corps extends React.Component {
             
                 if (ville.ville + " " +ville.codePostal == index) { //la valeur récupérée est la ville et le code postal au format "Drancy 93700"
                     this.setState({
+                        captureFiche:[],
                         villeSelect: ville.codePostal,
                         nomVille:ville.ville,
                         VilleFetching : false,
                     });
-                    
-            
+
                     this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), index, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    
                     console.log(this.state.ApiHref.length + this.state.villeSelect + this.state.nomDpt + this.state.nomRegion);
                     console.log(this.state.nomVille.substr(0,2));
                     
@@ -455,11 +488,11 @@ class Corps extends React.Component {
         this.setState({
             ApiHref : reponse.data.records.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1),
             LenghtFetching : false,
-        })
+        });
         
-
         console.log("response :"); 
         console.log(reponse); 
+
         
         console.log("response data records :");
         console.log(reponse.data.records);
@@ -475,14 +508,63 @@ class Corps extends React.Component {
 
     }
    
-    onSpecialiteClick = () => {
+    onSpecialiteClick = (e, id, recordid, enregid) => {
+        
+
         
         console.log("onSpecialiteClick effectué");
+        console.log(e);
+        console.log(id);
+
+        
+        // this.state.ApiHref.map(
+        //     (toto)=>
+        //     toto.recordid === id ? console.log("ici") : console.log(toto)
+        // )
+        
+        
+        //lenregistrement et lenregistrement2 récupèrent UN enregistrement correspondant à l'id (équivaut à find($id))
+            // const lenregistrement = this.state.ApiHref.find((toto)=>toto.recordid === id);  
+            // console.log("lenregistrement");
+            // console.log(lenregistrement);
+        
+        
+            // const lenregistrement2 = this.state.ApiHref.map((toto)=>toto.recordid === id ? 
+            // this.setState({captureFiche:toto})
+            // : this.setState({ApiHref:lesenregistrement}));
+        
+        
+        //lesenregistrement reccueille tous les enregistrements SAUF l'id sélectionné SOUS FORME DE TABLEAU (idéal pour modifier une api tableau (this.setState({ApiHref:lesenregistrement,}))
+        const lesenregistrement = this.state.ApiHref.filter((toto)=>toto.recordid != id);  
+        const lenregistrement = this.state.ApiHref.filter((toto)=>toto.recordid === id);  
+        
+        
+        this.setState({
+            idEnreg:recordid,
+            captureFiche:lenregistrement,
+        })
+
+        // if(this.state.toggleSpec) {
+        //     this.setState({
+        //         captureFiche:[],
+        //     })
+        // }
+
+
         
         this.setState({
             toggleSpec:!this.state.toggleSpec,
         })
+        
+        
+        console.log("recordid");
+        console.log(recordid);
+        console.log("enregid");
+        console.log(enregid);
+
     }
+    
+
     
     montre = (block1, block2, block3) => {
     
@@ -491,12 +573,38 @@ class Corps extends React.Component {
             montreDpt:block2,
             montreVille:block3,
         })
-    
-    
+    }
+
+    fetching = () => {
+        this.setState({
+            SpecialiteFetching : true,
+            RegionFetching : true,
+            DepartementFetching : true,
+            VilleFetching : true,  
+            
+        });
     }
 
 
     render() {
+
+
+         //VALIDE : (appel de la fonction dans le return principal : mafonction())
+        // function mafonction() {
+        //     return "bonjouroui";
+        // }
+        
+        //OU VALIDE : (appel de la fonction dans le return principal : mafonction())
+        const mafonction = () => (
+            <div>
+                {!this.state.SpecialiteFetching | !this.state.RegionFetching | !this.state.DepartementFetching | !this.state.VilleFetching && this.state.LenghtFetching 
+                ? (<div className="spinner-border text-center mx-auto text-primary" role="status"><span className="sr-only">Loading...</span></div>) : this.state.ApiHref.length == 9999 ? "Plus de " + this.state.ApiHref.length : this.state.ApiHref.length} 
+            
+                {this.fetching}
+            </div>
+            
+        );
+        
 
         return (
             <div>
@@ -511,7 +619,7 @@ class Corps extends React.Component {
 
                         <div className="tabbable-line mx-auto text-center">
                         
-                            <ul className="nav nav-tabs titleSearch" style={{position:"sticky", top:50,zIndex:99}}>
+                            <ul className="nav nav-tabs titleSearch" style={{position:"sticky", top:0,zIndex:99}}>
                                     <li className="active text-center mx-auto">
                                         <a className="text-center mx-auto" href="#tab_1" data-toggle="tab" style={{pointer:"cursor"}} aria-expanded="false" onClick={()=>this.initialize()}>
                                             RECHERCHER PAR TERRITOIRE </a>
@@ -535,11 +643,51 @@ class Corps extends React.Component {
                                                 {this.state.Specialites.map(specialite => (<option className="optionRemove text-center" key={specialite.id} value={specialite.codeProfession}>{specialite.libelleProfession}</option>))}
                                             </select>
                                         </div> 
+
+                                        <div className="row text-center h1 mt-5 mx-auto bord"> 
                 
-                                    
+                                                
+                
+                                                {this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length > 300 ? 
+                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                    Merci d'affiner votre recherche en précisant une région ou un département
+                                                </div> : ""}
+                
+                                                {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length > 300 ? 
+                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                    Merci d'affiner votre recherche en précisant un département
+                                                </div> : ""}
+                
+                                                {this.state.nomDpt != "" && this.state.ApiHref.length >= 300 ? 
+                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
+                                                    Merci d'affiner votre recherche en précisant la ville
+                                                </div> : ""}
+                                                {/* <div className="spinner-border text-primary" role="status"><span className="sr-only">Loading...</span></div> */}
+                                                {/* {this.state.ApiHref.length} */}
+                                                
+                                            <div className="col-sm-12">
+                                                
+                                                
+                                                {mafonction()}
+                                                {this.state.ApiHref.length > 1 && this.state.ApiHref.length != 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? 
+                                                (<div><div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                {this.state.ApiHref.length == 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div><div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
+                                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                                {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
+                
+                                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
+                                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
+                                                {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
+                                                
+                                                
+                
+                                            </div>
+                                        </div> 
+                                        
                                         <div className="row col-sm-12 mx-auto container-fluid">
                 
-                                            <div style={{display:this.state.montreRegion}} className="mx-auto form-group cadre text-center text-warning h4 col-sm-4">
+                                            <div style={{display:this.state.montreRegion}} onClick={(e)=>this.setState({clignoteRegion:false})} className={this.state.clignoteRegion ? "mx-auto form-group cadre text-center text-warning h4 col-sm-4 avertissement" : "mx-auto form-group cadre text-center text-warning h4 col-sm-4"}>
                                                 <div>Choisissez une région</div>
                                                 <div>-</div>
                                                 <select onChange={this.onChangeRegion.bind(this)} id="inputRegion" name="region" className="form-control inputstyle text-center mt-4 mb-2">
@@ -548,7 +696,7 @@ class Corps extends React.Component {
                                                 </select>
                                             </div>
                         
-                                            <div style={{display:this.state.montreDpt}} className="mx-auto form-group text-center h4 cadre text-danger col-sm-4">
+                                            <div style={{display:this.state.montreDpt}} onClick={(e)=>this.setState({clignoteDpt:false})} className={this.state.clignoteDpt ? "mx-auto form-group text-center h4 cadre text-danger col-sm-4 avertissement" : "mx-auto form-group text-center h4 cadre text-danger col-sm-4"}>
                                                 <div>{this.state.nomRegion != "" ? "Choisissez un département de la région " + this.state.nomRegion.toUpperCase() : (<div>Choisissez un département<div>-</div></div>) }</div>
                                                 
                                                 <select className="btnDpt text-center form-group h4 text-danger w-100" onChange={this.onChangeDpt.bind(this)} id="inputDpt" name="departement" className="btnDpt form-control inputstyle mt-4 mb-2">
@@ -557,7 +705,7 @@ class Corps extends React.Component {
                                                 </select>
                                             </div>
                                         
-                                            <div style={{display:this.state.montreVille}} id="inputvillegp" className="mx-auto form-group text-center cadre h4 text-danger col-sm-4">
+                                            <div style={{display:this.state.montreVille}} id="inputvillegp" onClick={(e)=>this.setState({clignoteVille:false})} className={this.state.clignoteVille ? "mx-auto form-group text-center cadre h4 text-danger col-sm-4 avertissement" : "mx-auto form-group text-center cadre h4 text-danger col-sm-4"}>
                                                 <div className="text-dark">{this.state.nomDpt != "" ? "Choisissez une VILLE du département " + this.state.nomDpt : (<div>Choisissez une ville<div>-</div></div>) }</div>
                                                 <select autoComplete="on" onChange={this.onChangeVille.bind(this)} id="inputVille" name="ville" className="btnVille form-control inputstyle text-center mt-4 mb-2">
                                                 <option className="btnVille text-center form-group h4 text-success">Choisissez une ville</option>
@@ -566,48 +714,7 @@ class Corps extends React.Component {
                                             </div> 
                 
                                         </div>
-                
-                                        <div className="row text-center h1 mt-5 mx-auto bord"> 
-                
-                                                {!this.state.SpecialiteFetching | !this.state.RegionFetching | !this.state.DepartementFetching | !this.state.VilleFetching && this.state.LenghtFetching ? (<div className="spinner-border text-center mx-auto text-primary" role="status"><span className="sr-only">Loading...</span></div>) : ""}
-                
-                                                {this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length > 170 ? 
-                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
-                                                    Merci d'affiner votre recherche en précisant une région ou un département
-                                                </div> : ""}
-                
-                                                {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length > 170 ? 
-                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
-                                                    Merci d'affiner votre recherche en précisant un département
-                                                </div> : ""}
-                
-                                                {this.state.nomDpt != "" && this.state.ApiHref.length >= 170 ? 
-                                                <div className="form-group h4 text-danger col-sm-7 mx-auto text-center bord">
-                                                    Merci d'affiner votre recherche en précisant la ville
-                                                </div> : ""}
-                                                {/* <div className="spinner-border text-primary" role="status"><span className="sr-only">Loading...</span></div> */}
-                                                {/* {this.state.ApiHref.length} */}
-                                                
-                                            <div className="col-sm-12">
-                                                {this.state.ApiHref.length > 1 && this.state.ApiHref.length != 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? 
-                                                (<div> {this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
-                                                
-                                                
-                                                
-                                                {this.state.ApiHref.length == 9999 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? (<div>{"Plus de " + this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">en France.</div> </div>) : ""} 
-                                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                                {this.state.ApiHref.length > 1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                                {this.state.ApiHref.length > 1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultats trouvés pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
-                
-                                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
-                                                {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
-                                                {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div>{this.state.ApiHref.length} <div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
-                                                
-                                                
-                
-                                            </div>
-                                        </div> 
-                
+
                 
                                     </div>
                                 </div>
@@ -637,8 +744,8 @@ class Corps extends React.Component {
                 
                 <div className="uni-services mx-auto">
                 <div className="uni-our-services-2 uni-background-4">
-                <div className="container mb-5">
-                
+                <div className="container mb-5 overflow-auto" style={{height:"1000px"}}>
+                {/* {this.state.captureFiche.length == 0 ? "" : this.state.captureFiche.map(bigItem => <ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={bigItem.recordid} item={bigItem}/>)} */}
                 {/* PAR SELECTION */}
                 {/* Affichage France */}                                                                              
                                                                                                                                                                                 {/* for menuItem in menuItemAll|sort((a, b) => a.orderNumber <=> b.orderNumber)
@@ -647,18 +754,18 @@ class Corps extends React.Component {
                                                                                                                                                                                 item.fields.nom.split(" ")[1]
                                                                                                                                                                                 */}
                                                                                                                                                                                 
-                 {/* {this.state.ApiHref.length <= 170 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
+                 {/* {this.state.ApiHref.length <= 9998 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<Miniature onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
                  {/* this.state.ApiHref.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1)                              */}
                    
-                {this.state.ApiHref.length <= 170 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                {this.state.ApiHref.length <= 9998 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
                 {/* Affichage par Région */}
-                {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 170 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 9998 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
                 
                 {/* Affichage par Departement */}
-                {this.state.ApiHref.length <= 170 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                {this.state.ApiHref.length <= 9998 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
                 
                 {/* PAR SAISIE  */}
-                {this.state.medecinNom.length <= 170 ? this.state.medecinNom.map(item => (<ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                {this.state.medecinNom.length <= 9998 ? this.state.medecinNom.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
                 
 
                 </div>
