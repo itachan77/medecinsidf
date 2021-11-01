@@ -4,7 +4,7 @@ body {
 
 .specialite {
     box-shadow:5px 5px 5px black;border-radius:15px;background-color:beige;
-    height:155px;
+    height:158px;
 }
 .specialite:hover {
     box-shadow:5px 5px 5px red;border-radius:9px;background-color:beige;
@@ -102,4 +102,19 @@ border-radius:20px;
     0%   { opacity:1; }
     40%   {opacity:0; }
     100% { opacity:1; }
+  }
+  
+  .styleColorMention {
+  
+    color: rgb(7, 130, 193); 
+    font-family: sans-serif, Arial, Verdana;
+  }
+  
+  .styleAlignFooter {
+    text-align: justify;
+  }
+  
+  .link:hover{
+  color:red;
+  
   }

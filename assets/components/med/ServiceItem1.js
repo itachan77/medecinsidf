@@ -45,12 +45,12 @@ return  (
     
         <div className={toggle ? 'col-sm-12' : 'col-sm-3'}>
             <a className="linkColor mx-auto" href={"#" +item.recordid}><div id={item.recordid} className="mb-2 specialite mt-5" onClick={onSpecialiteClick} style={{cursor:"pointer"}}>
-                <div className={toggle ? 'card-text h2 p-1 text-center' : 'card-text h4 p-1 text-center'}>
+                <div className={toggle ? 'card-text h2 p-1 text-center overflow-auto' : 'card-text h4 p-1 text-center'}>
                     <div className={toggle ? 'd-block text-danger h5 text-center mt-1' : 'd-none'}>Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
                     
                     {/* Affichage en petit */}
-                    <div className={toggle ? 'd-none' : 'd-block'}>
-                        <div className={toggle ? '' : 'font-weight-bold'}>{item.fields.nom.split(" ")[1]+" "+strUcFirst(item.fields.nom.split(" ")[0])}</div> 
+                    <div className={toggle ? 'd-none' : 'd-block overflow-auto'}>
+                        <div className={toggle ? '' : 'font-weight-bold'}>{item.fields.nom.split(" ")[1]} {item.fields.nom.split(" ")[2] == null ? "":item.fields.nom.split(" ")[2]} {strUcFirst(item.fields.nom.split(" ")[0])}</div> 
                         <div className={toggle ? '' : 'h6'}>{item.fields.libelle_profession != null ? item.fields.libelle_profession : ""}</div> 
                         <div className={toggle ? '' : 'h6'}>{item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}</div>
                         

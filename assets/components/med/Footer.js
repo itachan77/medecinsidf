@@ -3,6 +3,11 @@ import React from 'react';
 
 class Footer extends React.Component {
 
+    go = (view) => {
+        this.props.changeView(view);
+    }
+    
+
     render() {
 
         return (
@@ -14,7 +19,7 @@ class Footer extends React.Component {
                 <div className="footer-main-content-element col-md-3 col-sm-6">
                     <aside className="widget">
                     <h3 className="widget-title uni-uppercase text-center">Médecins libéraux de France</h3>
-                        <div className="widget-title uni-uppercase"><a href="#" className="row text-white h1"><hr/><i className="fas fa-hand-holding-medical"></i><hr/></a></div>
+                        <div className="widget-title uni-uppercase"><a style={{cursor:"pointer"}} onClick={()=>this.go("corps")} className="row text-white h1 link"><hr/><i className="fas fa-hand-holding-medical"></i><hr/></a></div>
                         <div className="widget-content">
 
 
@@ -23,15 +28,15 @@ class Footer extends React.Component {
                 </div>
                 <div className="footer-main-content-element col-md-6 col-sm-12">
 
-
                     <aside className="widget">
                         <h3 className="widget-title uni-uppercase text-center">D'OU PROVIENNENT<span> LES DONNEES ?</span></h3>
-                        
                         <div className="text-white text-center">L’ensemble des données est disponible en open data sur ce lien : </div>
                         <div className="text-center"><a href="https://data.opendatasoft.com/explore/dataset/medecins%40public/table/?flg=fr">Lien OpenDataSoft</a></div>
                         
-                        
+                        {/* il faut installer react-router-dom (npm install react-router-dom) */}
+                        <div className="mt-3 text-center"><a className="text-light link" style={{cursor:"pointer"}} onClick={()=>this.go("mention")}>Mentions Légales</a></div>
                     </aside>
+
                 </div>
                 <div className="footer-main-content-element col-md-3 col-sm-6">
                     <aside className="widget">
