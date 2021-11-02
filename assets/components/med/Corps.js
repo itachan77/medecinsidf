@@ -10,6 +10,7 @@ class Corps extends React.Component {
 
     state = {
         nextId:2,
+        nextIdInitial:2,
         Regions : [
             {
                 id : 1,
@@ -27,6 +28,15 @@ class Corps extends React.Component {
                 slug : '',
             },
         ],
+        DptsInitial : [
+            {
+                id : "",
+                code : '',
+                name : '',
+                regionCode : '',
+                slug : '',
+            },
+        ],
         Villes : [
             {
                 id : "",
@@ -35,6 +45,15 @@ class Corps extends React.Component {
                 departmentCode : '',
             },
         ],
+        VillesInitial : [
+            {
+                id : "",
+                ville : '',
+                codePostal : '',
+                departmentCode : '',
+            },
+        ],
+
         Specialites : [
             {
                 id:"",
@@ -78,22 +97,30 @@ class Corps extends React.Component {
     }
 
 
-
     componentDidMount() {
 
-        // fetch('/villes/' + "toutesVilles")
-        // .then(res => res.json())
-        // .then(Villes => {
-        //     this.setState({
-        //         Villes: Villes.map(ville => ({
-        //         id: ville.id,
-        //         ville:ville.ville,
-        //         codePostal:ville.codePostal,
-        //         departmentCode:ville.departmentCode,
-        //         })),
-        //         nextId: Math.max(...Villes.map(ville => ville.id)) + 1 
-        // })
-        // })
+        fetch('/villes/' + "toutesVilles")
+        .then(res => res.json())
+        .then(Villes => {
+            this.setState({
+                Villes: Villes.map(ville => ({
+                id: ville.id,
+                ville:ville.ville,
+                codePostal:ville.codePostal,
+                departmentCode:ville.departmentCode,
+                })),
+                VillesInitial: Villes.map(ville => ({
+                    id: ville.id,
+                    ville:ville.ville,
+                    codePostal:ville.codePostal,
+                    departmentCode:ville.departmentCode,
+                })),
+    
+                nextId: Math.max(...Villes.map(ville => ville.id)) + 1, 
+                nextIdInitial: Math.max(...Villes.map(ville => ville.id)) + 1, 
+        })
+
+        })
 
 
         fetch('/specialite')
@@ -141,7 +168,16 @@ class Corps extends React.Component {
                 name:departement.name,
                 regionCode:departement.regionCode,
                 })),
-                nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
+                DptsInitial: Dpts.map(departement => ({
+                    id: departement.id,
+                    code:departement.code,
+                    slug:departement.slug,
+                    name:departement.name,
+                    regionCode:departement.regionCode,
+                })),
+
+                nextId: Math.max(...Dpts.map(departement => departement.id)) + 1,
+                nextIdInitial: Math.max(...Dpts.map(departement => departement.id)) + 1, 
             })
         })
 
@@ -204,6 +240,8 @@ class Corps extends React.Component {
         
         if (e != undefined) {
         
+
+    
             var dataObjetSpecialite = this.state.Specialites;
             
             dataObjetSpecialite.map(specialite => {
@@ -253,6 +291,7 @@ class Corps extends React.Component {
         if (e != undefined) {
     
             var dataObjetRegion = this.state.Regions;
+            var dataObjetDpts = this.state.DptsInitial;
             
             dataObjetRegion.map(region => {
             
@@ -267,38 +306,45 @@ class Corps extends React.Component {
                     });
                     
                     this.onTermSubmit(region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
+                    
                     console.log("pour région " + region.slug.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     console.log("dans region");
-                    
                     console.log("this.state.captureFiche");
                     console.log(this.state.captureFiche);
                     console.log("this.state.ApiHref");
                     console.log(this.state.ApiHref);
+                    console.log("dataObjetDpts");
+                    console.log(dataObjetDpts);
+                    console.log("index");
+                    console.log(index);
 
-    
-                    // this.state.Dpts
-                    // let dataDpt = $("#inputDpt").attr("data-dpt");
-                    // let dataObjetDpt = JSON.parse(dataDpt);
-
-                    fetch('/departements/' + region.code)
-                    .then(res => res.json())
-                    .then(Dpts => {
-                        this.setState({
-                            Dpts: Dpts.map(departement => ({
-                            id: departement.id,
-                            code:departement.code,
-                            slug:departement.slug,
-                            name:departement.name,
-                            regionCode:departement.regionCode,
-                            })),
-                            nextId: Math.max(...Dpts.map(departement => departement.id)) + 1,     
-                    })
-                    })
-
-
-                    
-                }    
+                    let dptsTab = [];
+                    for (let obj in dataObjetDpts) {
                 
+                        //inputRegion.value = la classe du select et value permettent d'avoir le résultat.
+                        //cette ligne if est comme si je disais quand tu arrives par la boucle à 11, ...suite : affiche tous les départements d'ile de france
+                        if(dataObjetDpts[obj].regionCode == index ) {
+            
+                            dptsTab.push(dataObjetDpts[obj]);
+            
+                        }
+                        else console.log("pas dans le tableau")
+                    }
+                    console.log(dptsTab);
+                    
+                    this.setState({
+                        Dpts: dptsTab.map(departement => ({
+                        id: departement.id,
+                        code:departement.code,
+                        slug:departement.slug,
+                        name:departement.name,
+                        regionCode:departement.regionCode,
+                        })),
+                        nextId: Math.max(...dptsTab.map(departement => departement.id)) + 1,     
+                    })
+
+
+                }    
                 
                 
             })
@@ -310,7 +356,8 @@ class Corps extends React.Component {
                 regionSelect: "aucune selection"
             });
         }
-        
+
+
         this.montre("block", "block", "none");
     }
 
@@ -324,6 +371,7 @@ class Corps extends React.Component {
         if (e != undefined) {
     
             var dataObjetDpt = this.state.Dpts;
+            var dataObjetVille= this.state.VillesInitial;
             
             dataObjetDpt.map(departement => {
             
@@ -343,18 +391,30 @@ class Corps extends React.Component {
 
                     this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), departement.slug.toUpperCase(), null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
 
-                    fetch('/villes/' + departement.code)
-                    .then(res => res.json())
-                    .then(Villes => {
-                        this.setState({
-                            Villes: Villes.map(ville => ({
+
+                    let villeTab = [];
+                    for (let obj in dataObjetVille) {
+                
+                        //inputRegion.value = la classe du select et value permettent d'avoir le résultat.
+                        //cette ligne if est comme si je disais quand tu arrives par la boucle à 11, ...suite : affiche tous les départements d'ile de france
+                        if(dataObjetVille[obj].departmentCode == index ) {
+            
+                            villeTab.push(dataObjetVille[obj]);
+            
+                        }
+
+                    }
+                    console.log("villeTab");
+                    console.log(villeTab);
+                    
+                    this.setState({
+                        Villes: villeTab.map(ville => ({
                             id: ville.id,
                             ville:ville.ville,
                             codePostal:ville.codePostal,
                             departmentCode:ville.departmentCode,
                             })),
-                            nextId: Math.max(...Villes.map(ville => ville.id)) + 1 
-                        })
+                            nextId: Math.max(...villeTab.map(ville => ville.id)) + 1     
                     })
                 
                 }    
