@@ -40,11 +40,12 @@ return  (
         <div>
             <div id={item.recordid} className="mb-2 specialite mt-5">
                 <div className="card-text h2 p-1 text-center">
-                    <div className="text-danger h5 text-center mt-1">Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
+                    <div className="text-danger h5 text-center mt-1 d-none d-md-block">Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
                     {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
                     
                 </div>
-                <div className="ml-2 pb-3 text-center"> Convention : {item.fields.convention}</div>
+                <div className="ml-2 pb-3 text-center d-none d-md-block"> Convention : {item.fields.convention}</div>
+                
             </div>
 
             <div className="uni-our-service-2-body">
@@ -72,13 +73,14 @@ return  (
                                         <div className="col-md-12 col-lg-7 pl-5">
                                             <div className="item-caption row">
                                                 <div className="item-caption-title col-sm-12">
+                                                    <div className="ml-2 pb-3 text-center h6 d-block d-md-none"> Convention : {item.fields.convention}</div>
                                                     <h3>ADRESSE</h3>
                                                     <div className="uni-line"></div>
                                                     <div>{item.fields.adresse}</div>
                                                     <div className="d-sm-block d-md-block d-lg-none">
                                                         <i className="fas fa-phone-square-alt"></i> 
                                                         <a href={item.fields.telephone != null ? "tel:" + item.fields.telephone : ""}> {item.fields.telephone}</a>
-                                                        <div><button className="btn btn-primary mx-auto mt-1"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>VOIR LE MEDECIN SUR DOCTOLIB</a></button></div>
+                                                        <div><button className="btn btn-primary mx-auto mt-2"><a className="text-white" target="_blank" href={"https://www.doctolib.fr/doctors/" + item.fields.nom}>DOCTOLIB</a></button></div>
                                                     </div>
                                                 </div>
                                                 

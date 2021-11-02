@@ -130,20 +130,20 @@ class Corps extends React.Component {
 
 
 
-        fetch('/departements/' + this.state.regionSelect)
-        .then(res => res.json())
-        .then(Dpts => {
-            this.setState({
-                Dpts: Dpts.map(departement => ({
-                id: departement.id,
-                code:departement.code,
-                slug:departement.slug,
-                name:departement.name,
-                regionCode:departement.regionCode,
-                })),
-                nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
-            })
-        })
+        // fetch('/departements/' + this.state.regionSelect)
+        // .then(res => res.json())
+        // .then(Dpts => {
+        //     this.setState({
+        //         Dpts: Dpts.map(departement => ({
+        //         id: departement.id,
+        //         code:departement.code,
+        //         slug:departement.slug,
+        //         name:departement.name,
+        //         regionCode:departement.regionCode,
+        //         })),
+        //         nextId: Math.max(...Dpts.map(departement => departement.id)) + 1 
+        //     })
+        // })
 
 
 
@@ -276,10 +276,7 @@ class Corps extends React.Component {
                     console.log(this.state.ApiHref);
 
     
-                    // this.state.Dpts
-                    // let dataDpt = $("#inputDpt").attr("data-dpt");
-                    // let dataObjetDpt = JSON.parse(dataDpt);
-
+                                        
                     fetch('/departements/' + region.code)
                     .then(res => res.json())
                     .then(Dpts => {

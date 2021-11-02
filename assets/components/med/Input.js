@@ -38,8 +38,6 @@ class Input extends React.Component {
     
     render() {
 
-
-
         // const brands = ['cca', 'ccb', 'ccc', 'bba', 'bbb', 'bbc', 'aaa', 'aab', 'aac'];
         
         // const groups = brands.reduce((groups, brand) => {
@@ -73,17 +71,12 @@ class Input extends React.Component {
         return (
 
             <div>
-
-                    
-                    
                     <Header/>
                     
                     {/* {this.state.page == "corps" ? <Corps /> : <Route exact path="/mention" component={Mention}/>}  */}
                     {this.state.page == "corps" ? <Corps /> : <Mention/>} 
                     
                     <Footer changeView={this.changeView}/>
-    
-                
             </div>    
         );
     }
