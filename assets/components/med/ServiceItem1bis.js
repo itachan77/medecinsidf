@@ -1,6 +1,8 @@
 import React from 'react';
 
-
+function strUcFirst (a) {
+    return (a+'').charAt(0).toUpperCase()+a.substr(1).toLowerCase();
+}
 
 const ServiceItem = ({item, toggle, onSpecialiteClick}) => {
     // {item.fields.nom_dep}
@@ -38,10 +40,10 @@ const ServiceItem = ({item, toggle, onSpecialiteClick}) => {
 return  (
 
         <div>
-            <div id={item.recordid} className="mb-2 specialite mt-5">
+            <div id={item.recordid} className="mb-2 specialite mt-5" onClick={(e)=>onSpecialiteClick(e, null, null, null)}>
                 <div className="card-text h2 p-1 text-center">
                     <div className="text-danger h5 text-center mt-1 d-none d-md-block">Nom, spécialité et nature de l'exercice du médecin {item.length}:</div>
-                    {item.fields.nom} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
+                    {item.fields.nom.split(" ")[1]} {item.fields.nom.split(" ")[2] == null ? "":item.fields.nom.split(" ")[2]} {strUcFirst(item.fields.nom.split(" ")[0])} - {item.fields.libelle_profession != null ? item.fields.libelle_profession : ""} - {item.fields.nature_exercice != null ? item.fields.nature_exercice : ""}
                     
                 </div>
                 <div className="ml-2 pb-3 text-center d-none d-md-block"> Convention : {item.fields.convention}</div>

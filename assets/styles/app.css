@@ -6,8 +6,11 @@ body {
     box-shadow:5px 5px 5px black;border-radius:15px;background-color:beige;
     height:158px;
 }
+
+
 .specialite:hover {
     box-shadow:5px 5px 5px red;border-radius:9px;background-color:beige;
+    cursor:pointer;
 }
 
 .minimenu {

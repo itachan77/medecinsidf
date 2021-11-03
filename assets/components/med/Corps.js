@@ -89,15 +89,19 @@ class Corps extends React.Component {
         montreDpt:"none",
         montreVille:"none",
         captureFiche:[],
+        captureFicheSaisie:[],
         idEnreg:null,
         clignoteVille:true,
         clignoteDpt:true,
         clignoteRegion:true,
+        heightApi:9999,
+
 
     }
 
 
     componentDidMount() {
+
 
         fetch('/villes/' + "toutesVilles")
         .then(res => res.json())
@@ -239,9 +243,7 @@ class Corps extends React.Component {
         console.log(index);
         
         if (e != undefined) {
-        
 
-    
             var dataObjetSpecialite = this.state.Specialites;
             
             dataObjetSpecialite.map(specialite => {
@@ -568,10 +570,10 @@ class Corps extends React.Component {
         
         //console.log(reponse); pour voir les infos récupérées par l'api youtube
         //: on voit que reponse est un tableau
-
-
     }
-   
+
+
+    
     onSpecialiteClick = (e, id, recordid, enregid) => {
         
 
@@ -601,12 +603,19 @@ class Corps extends React.Component {
         //lesenregistrement reccueille tous les enregistrements SAUF l'id sélectionné SOUS FORME DE TABLEAU (idéal pour modifier une api tableau (this.setState({ApiHref:lesenregistrement,}))
         const lesenregistrement = this.state.ApiHref.filter((toto)=>toto.recordid != id);  
         const lenregistrement = this.state.ApiHref.filter((toto)=>toto.recordid === id);  
+
+
+        const lenregistrementSaisie = this.state.medecinNom.filter((toto)=>toto.recordid === id);  
+
+
         
         
         this.setState({
             idEnreg:recordid,
             captureFiche:lenregistrement,
+            captureFicheSaisie:lenregistrementSaisie,
         })
+
 
         // if(this.state.toggleSpec) {
         //     this.setState({
@@ -625,6 +634,10 @@ class Corps extends React.Component {
         console.log(recordid);
         console.log("enregid");
         console.log(enregid);
+        console.log("lenregistrement");
+        console.log(lenregistrement);
+        console.log("lenregistrementSaisie");
+        console.log(lenregistrementSaisie);
 
     }
     
@@ -808,7 +821,8 @@ class Corps extends React.Component {
                 
                 <div className="uni-services mx-auto">
                 <div className="uni-our-services-2 uni-background-4">
-                <div className="container mb-5 overflow-auto" style={{height:"1000px"}}>
+                <div className="container mb-5 overflow-auto" style={this.state.ApiHref.length>0 ? {height:"1000px"} : {height:"100px"}}>
+                    
                 {/* {this.state.captureFiche.length == 0 ? "" : this.state.captureFiche.map(bigItem => <ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={bigItem.recordid} item={bigItem}/>)} */}
                 {/* PAR SELECTION */}
                 {/* Affichage France */}                                                                              
@@ -818,20 +832,21 @@ class Corps extends React.Component {
                                                                                                                                                                                 item.fields.nom.split(" ")[1]
                                                                                                                                                                                 */}
                                                                                                                                                                                 
-                 {/* {this.state.ApiHref.length <= 9998 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<Miniature onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
-                 {/* this.state.ApiHref.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1)                              */}
-                   
-                {this.state.ApiHref.length <= 9998 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                {/* Affichage par Région */}
-                {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 9998 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                
-                {/* Affichage par Departement */}
-                {this.state.ApiHref.length <= 9998 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                
-                {/* PAR SAISIE  */}
-                {this.state.medecinNom.length <= 9998 ? this.state.medecinNom.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                
+                    {/* {this.state.ApiHref.length <= 9998 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<Miniature onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
+                    {/* this.state.ApiHref.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1)                              */}
+                    
+                    {this.state.ApiHref.length <= 9998 && this.state.termNom == null && this.state.nomRegion == "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                    {/* Affichage par Région */}
+                    {this.state.nomRegion != "" && this.state.nomDpt == "" && this.state.ApiHref.length != 0 && this.state.ApiHref.length < 9998 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                    
+                    {/* Affichage par Departement */}
+                    {this.state.ApiHref.length <= 9998 && this.state.nomDpt != "" && this.state.ApiHref.length != 0 ? this.state.ApiHref.map(item => (<Miniature captureFiche={this.state.captureFiche} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                    
+                    {/* PAR SAISIE  */}
+                    {this.state.medecinNom.length <= 9998 ? this.state.medecinNom.map(item => (<Miniature captureFiche={this.state.captureFicheSaisie} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
+                    
 
+                                                                                                                                                                                
                 </div>
                 
                 <div id="toTop" style={{display:"flex"}}><div className="btn btn-totop"><a href="#top"><i className="fa fa-angle-double-up" aria-hidden="true"></i></a></div></div>
