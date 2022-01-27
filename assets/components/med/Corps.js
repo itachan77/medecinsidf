@@ -821,7 +821,7 @@ class Corps extends React.Component {
                 
                 <div className="uni-services mx-auto">
                 <div className="uni-our-services-2 uni-background-4">
-                <div className="container mb-5 overflow-auto" style={this.state.ApiHref.length>0 ? {height:"1000px"} : {height:"100px"}}>
+                <div className="container mb-5 overflow-auto" style={this.state.ApiHref.length>0 ? {height:"1000px"} : {height:"800px"}}>
                     
                 {/* {this.state.captureFiche.length == 0 ? "" : this.state.captureFiche.map(bigItem => <ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={bigItem.recordid} item={bigItem}/>)} */}
                 {/* PAR SELECTION */}
