@@ -1,4 +1,6 @@
 import React from 'react';
+import Navbar from './components/Navbar.js';
+import BoxMain from './components/BoxMain.js';
 
 class Exo extends React.Component {
 
@@ -13,35 +15,14 @@ class Exo extends React.Component {
         return (
             
             <div>
-                <div className="container-fluid policehome">
-                
-                    <div className="row">
-                    
-                        <div className="col-sm-12 shadow p-3 mb-5 bg-white rounded">
-                            <div className="row col-sm-6">
-                                <div className="col-sm-3">Offre</div>
-                                <div className="col-sm-3">Demande</div>
-                            </div>
-                            
-                            <div className="row col-sm-12">
-                                <div className="col-sm-4 bg-danger"></div>
-                                <div className="col-sm-4 bg-warning"></div>
-                                <div className="col-sm-4 bg-info"></div>
-                            </div>
-                            
-                            <div className="col-sm-12">
-                                <div>Prix</div>
-                            </div>
-                            
-                            <div className="col-sm-12">
-                                <div>toggle</div>
-                            </div>
-                        </div>
-                    
-                    </div>
 
-                    
+
+                <Navbar/>
+                
+                <div className="mx-auto text-center">
+                    <h1>Découvrez les coiffeurs près de chez vous !</h1>
                 </div>
+                <BoxMain/>
                 
             </div>
         
@@ -51,4 +32,5 @@ class Exo extends React.Component {
 
 
 }
-    
+
+export default Exo;

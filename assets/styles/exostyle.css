@@ -1,3 +1,60 @@
 .policehome {
   font-size: 25px;
 }
+.faSize {
+  font-size: 60px;
+}
+#offrebox {
+  display: none;
+}
+#demandebox {
+  display: none;
+}
+input[type="checkbox"].choixoffre + label {
+  color: red;
+}
+input[type="checkbox"]:checked + label {
+  position: absolute;
+  box-sizing: border-box;
+  content: "";
+  border-radius: 1rem;
+}
+.searchgroup {
+  margin-top: 10px;
+}
+#searchgroup:hover {
+  border: 2px solid black;
+}
+.listbox {
+  background-color: rgb(233, 236, 239);
+  margin: auto;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  padding: 5px;
+}
+.fleche:hover {
+  color: red;
+  font-size: 30px;
+}
+.menu {
+  z-index: 5;
+  position: absolute;
+}
+.boxMain {
+  z-index: 2;
+}
+.menuLocalisation {
+  z-index: 5;
+  position: absolute;
+  height: 200px;
+  overflow: auto;
+}
+.etrepro {
+  font-size: 20px;
+  border-radius: 10px;
+}
+.fa-user-tie {
+  font-size: 30px;
+}
