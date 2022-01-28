@@ -756,9 +756,7 @@ class Corps extends React.Component {
                                                 {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la région {this.state.nomRegion.toUpperCase()}</div></div>) : ""}
                                                 {this.state.ApiHref.length <=1 && this.state.villeSelect == "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans le département {this.state.nomDpt}</div></div>) : ""}
                                                 {this.state.ApiHref.length <=1 && this.state.villeSelect != "aucune selection" && this.state.nomDpt != "" && this.state.termNom == null && this.state.nomRegion != "" ? (<div><div className="h4">résultat trouvé pour la profession de</div> {this.state.specialiteSelect.toLowerCase()} <div className="h4 text-danger">dans la ville de {this.state.nomVille} ({this.state.villeSelect})</div></div>) : ""}
-                                                
-                                                
-                
+
                                             </div>
                                         </div> 
                                         
@@ -826,12 +824,7 @@ class Corps extends React.Component {
                 {/* {this.state.captureFiche.length == 0 ? "" : this.state.captureFiche.map(bigItem => <ServiceItem onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={bigItem.recordid} item={bigItem}/>)} */}
                 {/* PAR SELECTION */}
                 {/* Affichage France */}                                                                              
-                                                                                                                                                                                {/* for menuItem in menuItemAll|sort((a, b) => a.orderNumber <=> b.orderNumber)
-                                                                                                                                                                                this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map
-                                                                                                                                                                                
-                                                                                                                                                                                item.fields.nom.split(" ")[1]
-                                                                                                                                                                                */}
-                                                                                                                                                                                
+                                                                                                                                       
                     {/* {this.state.ApiHref.length <= 9998 && this.state.villeSelect == "aucune selection" && this.state.nomDpt == "" && this.state.termNom == null && this.state.nomRegion == "" ? this.state.ApiHref.sort((a, b)=> (a.fields.nom > b.fields.nom) ? 1 : -1).map(item => (<Miniature onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}  */}
                     {/* this.state.ApiHref.sort((a, b)=> (a.fields.nom.split(" ")[1] > b.fields.nom.split(" ")[1]) ? 1 : -1)                              */}
                     
@@ -844,15 +837,10 @@ class Corps extends React.Component {
                     
                     {/* PAR SAISIE  */}
                     {this.state.medecinNom.length <= 9998 ? this.state.medecinNom.map(item => (<Miniature captureFiche={this.state.captureFicheSaisie} idEnreg={this.state.idEnreg} onSpecialiteClick={this.onSpecialiteClick} toggle={this.state.toggleSpec} key={item.recordid} item={item}/>)) : ""}
-                    
-
-                                                                                                                                                                                
+                                                                                                         
                 </div>
                 
                 <div id="toTop" style={{display:"flex"}}><div className="btn btn-totop"><a href="#top"><i className="fa fa-angle-double-up" aria-hidden="true"></i></a></div></div>
-                
-                
-                
                 </div>
 
 </div>
