@@ -96,7 +96,6 @@ class Corps extends React.Component {
         clignoteRegion:true,
         heightApi:9999,
 
-
     }
 
 
@@ -192,7 +191,6 @@ class Corps extends React.Component {
 
     initialize(){
 
-        console.log("marche ?");
         this.setState({
             medecinNom : [],
             termNom: null,
@@ -308,17 +306,7 @@ class Corps extends React.Component {
                     });
                     
                     this.onTermSubmit(region.slug.toUpperCase(), null, null, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
-                    
-                    console.log("pour région " + region.slug.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), this.state.villeSelect == "aucune selection" ? null : this.state.villeSelect, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
-                    console.log("dans region");
-                    console.log("this.state.captureFiche");
-                    console.log(this.state.captureFiche);
-                    console.log("this.state.ApiHref");
-                    console.log(this.state.ApiHref);
-                    console.log("dataObjetDpts");
-                    console.log(dataObjetDpts);
-                    console.log("index");
-                    console.log(index);
+
 
                     let dptsTab = [];
                     for (let obj in dataObjetDpts) {
@@ -332,7 +320,7 @@ class Corps extends React.Component {
                         }
                         else console.log("pas dans le tableau")
                     }
-                    console.log(dptsTab);
+
                     
                     this.setState({
                         Dpts: dptsTab.map(departement => ({
@@ -456,8 +444,6 @@ class Corps extends React.Component {
 
                     this.onTermSubmit(this.state.nomRegion == "" ? null : this.state.nomRegion.toUpperCase(), this.state.nomDptSlug == "" ? null:this.state.nomDptSlug.toUpperCase(), index, this.state.specialiteSelectCode == "aucune selection" ? null : this.state.specialiteSelectCode);
                     
-                    console.log(this.state.ApiHref.length + this.state.villeSelect + this.state.nomDpt + this.state.nomRegion);
-                    console.log(this.state.nomVille.substr(0,2));
                     
                 }    
                 
@@ -488,7 +474,6 @@ class Corps extends React.Component {
                 "refine.code_profession" : termSpec,
                 // facet : "HAUTS-DE-SEINE",
                 // facet : "nom_dep",
-        
                 //  facet: "exercice_particulier"
                 //  facet: "nature_exercice"
                 //  facet: "convention"

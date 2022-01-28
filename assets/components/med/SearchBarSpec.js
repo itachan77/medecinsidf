@@ -1,6 +1,5 @@
 import React, {Component,useEffect, useState, useRef} from 'react';
 import Select, { components } from "react-select";
-import { countryOptions } from "./options";
 import "./autofill.css";
 
 
@@ -99,30 +98,18 @@ componentDidMount() {
         return (
                 <div>
 
-                    {/* <form onSubmit={this.onSubmit}>
-                        <div className="input-group mb-3 row mx-auto">
-                            <input type="text" 
-                                className="form-control col-sm-10 inputstyle" 
-                                placeholder="Saisissez un nom de médecin" 
-                                aria-label="Recipient's username" 
-                                aria-describedby="basic-addon2"
-                                value={this.state.termVille}
-                                onChange={this.onChange}
-                            />
-                            <button type="submit" className="inputstyle text-dark">OK</button>
-                        </div>
-                    </form> */}
 
-      <Select
-        styles={styles}
-        placeholder="Saisissez une Specialité"
-        //autoComplete="given-name"
-        components={{ Input }}
-        inputId="frmNameA"
-        options={this.state.Specialites.map(specialite => ({label:specialite.libelleProfession, value:specialite.codeProfession}))}
-        onChange={this.props.onChangeSpec.bind(this)}
-        //onChange={()=>this.props.onChangeSpec(45)}
-      />
+
+                  <Select
+                    styles={styles}
+                    placeholder="Saisissez une Specialité"
+                    //autoComplete="given-name"
+                    components={{ Input }}
+                    inputId="frmNameA"
+                    options={this.state.Specialites.map(specialite => ({label:specialite.libelleProfession, value:specialite.codeProfession}))}
+                    onChange={this.props.onChangeSpec.bind(this)}
+                    //onChange={()=>this.props.onChangeSpec(45)}
+                  />
 
 
 

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-// import SearchBarVille from './SearchBarVille.js';
 import SearchBarSpec from './SearchBarSpec.js';
 import AutoVille from './AutoComplete/2/AutoVille.js';
-// import AutoNom from './AutoComplete/2/AutoNom.js';
 
 class SearchBar extends Component {
 
@@ -16,7 +14,8 @@ class SearchBar extends Component {
         //  force la première lettre en majuscule et les autres lettres en minuscule
         //return (a+'').charAt(0).toUpperCase()+a.substr(1).toLowerCase();}
         //  force la première lettre en majuscule
-        return (a+'').charAt(0).toUpperCase()+a.substr(1);}
+        return (a+'').charAt(0).toUpperCase()+a.substr(1);
+    }
 
 
 
@@ -99,7 +98,7 @@ class SearchBar extends Component {
                         <div className="mx-auto form-group cadre text-center text-dark h4 pl-3 pr-3 pb-3">
                             <div>Saisissez une ville</div>
                             <div>-</div>
-                            {/* <SearchBarVille onChangeVille={this.onChangeVille} specialTermPropsVille={this.props.specialTermPropsVille}/>  */}
+
                             <div className="text-center mx-auto">
                                 <AutoVille onChangeVille={this.onChangeVille} mons="props OK"/>
                             </div>
